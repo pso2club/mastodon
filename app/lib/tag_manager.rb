@@ -52,6 +52,11 @@ class TagManager
     return matches[1] unless matches.nil?
   end
 
+  def unique_tag_to_domain(tag)
+    matches = Regexp.new("tag:(.*\..*),").match(tag)
+    return matches[1] unless matches.nil?
+  end
+
   def local_id?(id)
     id.start_with?("tag:#{Rails.configuration.x.local_domain}")
   end
