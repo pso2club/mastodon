@@ -5,6 +5,8 @@ class Status < ApplicationRecord
   include Streamable
   include Cacheable
 
+  @@union_domain = ['example.com', 'example.net']
+
   enum visibility: [:public, :unlisted, :private, :direct], _suffix: :visibility
 
   belongs_to :application, class_name: 'Doorkeeper::Application'
@@ -34,13 +36,14 @@ class Status < ApplicationRecord
 
   scope :remote, -> { where.not(uri: nil) }
   scope :local, -> { where(uri: nil) }
+  scope :union, -> { where.not(uri: nil) } # need?
 
   scope :without_replies, -> { where('statuses.reply = FALSE OR statuses.in_reply_to_account_id = statuses.account_id') }
   scope :without_reblogs, -> { where('statuses.reblog_of_id IS NULL') }
   scope :with_public_visibility, -> { where(visibility: :public) }
   scope :tagged_with, ->(tag) { joins(:statuses_tags).where(statuses_tags: { tag_id: tag }) }
   scope :local_only, -> { left_outer_joins(:account).where(accounts: { domain: nil }) }
-  scope :union_only, -> { left_outer_joins(:account).where('accounts.domain IN (?) OR accounts.domain IS NULL', ['example.com', 'example.net'] ) }
+  scope :union_only, -> { left_outer_joins(:account).where('accounts.domain IN (?) OR accounts.domain IS NULL', @@union_domain ) }
   scope :excluding_silenced_accounts, -> { left_outer_joins(:account).where(accounts: { silenced: false }) }
   scope :including_silenced_accounts, -> { left_outer_joins(:account).where(accounts: { silenced: true }) }
   scope :not_excluded_by_account, ->(account) { where.not(account_id: account.excluded_from_timeline_account_ids) }
@@ -53,6 +56,14 @@ class Status < ApplicationRecord
 
   def local?
     uri.nil?
+  end
+
+  def union?
+    if local?
+      local?
+    else
+      account = Account.find(account_id)
+      @@union_domain.include?(account.domain)
   end
 
   def reblog?
@@ -124,14 +135,14 @@ class Status < ApplicationRecord
       where(account: [account] + account.following)
     end
 
-    def as_public_timeline(account = nil, flags = {})
-      query = timeline_scope(flags).without_replies
+    def as_public_timeline(account = nil, local_only = false, union_only = false)
+      query = timeline_scope(local_only, union_only).without_replies
 
       apply_timeline_filters(query, account)
     end
 
-    def as_tag_timeline(tag, account = nil, flags = {})
-      query = timeline_scope(flags).tagged_with(tag)
+    def as_tag_timeline(tag, account = nil, local_only = false, union_only = false)
+      query = timeline_scope(local_only, union_only).tagged_with(tag)
 
       apply_timeline_filters(query, account)
     end
@@ -182,11 +193,10 @@ class Status < ApplicationRecord
 
     private
 
-    def timeline_scope(flags = {})
-      flags = { local_only: false, union_only: false}.merge(flags)
-      if flags[:local_only].present?
+    def timeline_scope(local_only = false, union_only = false)
+      if local_only
         starting_scope = Status.local_only
-      elsif flags[:union_only].present?
+      elsif union_only
         starting_scope = Status.union_only
       else
         starting_scope = Status

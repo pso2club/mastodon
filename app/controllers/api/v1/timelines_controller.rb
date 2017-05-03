@@ -21,8 +21,8 @@ class Api::V1::TimelinesController < ApiController
   end
 
   def public
-    flags    = timeline_flags()
-    @statuses = Status.as_public_timeline(current_account, flags).paginate_by_max_id(limit_param(DEFAULT_STATUSES_LIMIT), params[:max_id], params[:since_id])
+    timeline_flags_check
+    @statuses = Status.as_public_timeline(current_account, params[:local], params[:union]).paginate_by_max_id(limit_param(DEFAULT_STATUSES_LIMIT), params[:max_id], params[:since_id])
     @statuses = cache_collection(@statuses)
 
     set_maps(@statuses)
@@ -36,9 +36,9 @@ class Api::V1::TimelinesController < ApiController
   end
 
   def tag
-    @flags    = timeline_flags()
+    timeline_flags_check
     @tag      = Tag.find_by(name: params[:id].downcase)
-    @statuses = @tag.nil? ? [] : Status.as_tag_timeline(@tag, current_account, @flags).paginate_by_max_id(limit_param(DEFAULT_STATUSES_LIMIT), params[:max_id], params[:since_id])
+    @statuses = @tag.nil? ? [] : Status.as_tag_timeline(@tag, current_account, params[:local], params[:union]).paginate_by_max_id(limit_param(DEFAULT_STATUSES_LIMIT), params[:max_id], params[:since_id])
     @statuses = cache_collection(@statuses)
 
     set_maps(@statuses)
@@ -57,15 +57,11 @@ class Api::V1::TimelinesController < ApiController
     super(raw, Status)
   end
 
-  def timeline_flags
-    #return { local_only: params[:local].present? ? params[:local] : false, union_only: params[:union].present? ? params[:union] : false }
-    return { local_only: ActiveRecord::Type::Boolean.new.cast(params[:local]), union_only: ActiveRecord::Type::Boolean.new.cast(params[:union]) }
+  def timeline_flags_check
+    params[:local] = ActiveRecord::Type::Boolean.new.cast(params[:local]) unless params[:local].nil?
+    params[:union] = ActiveRecord::Type::Boolean.new.cast(params[:union]) unless params[:union].nil?
   end
 
-  #def to_boolean_params(bool)
-  #  
-  #end
-  #
   def pagination_params(core_params)
     params.permit(:local, :union, :limit).merge(core_params)
   end
