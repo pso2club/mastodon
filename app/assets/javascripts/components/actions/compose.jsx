@@ -100,6 +100,10 @@ export function submitCompose() {
           dispatch(updateTimeline('community', { ...response.data }));
         }
 
+        if (getState().getIn(['timelines', 'union', 'loaded'])) {
+          dispatch(updateTimeline('union', { ...response.data }));
+        }
+
         if (getState().getIn(['timelines', 'public', 'loaded'])) {
           dispatch(updateTimeline('public', { ...response.data }));
         }

@@ -26,6 +26,7 @@ import Status from '../features/status';
 import GettingStarted from '../features/getting_started';
 import PublicTimeline from '../features/public_timeline';
 import CommunityTimeline from '../features/community_timeline';
+import UnionTimeline from '../features/union_timeline';
 import AccountTimeline from '../features/account_timeline';
 import HomeTimeline from '../features/home_timeline';
 import Compose from '../features/compose';
@@ -132,6 +133,7 @@ class Container extends React.PureComponent {
           {pathname: '/timelines/home', component: HomeTimeline},
           {pathname: '/timelines/public', component: PublicTimeline},
           {pathname: '/timelines/public/local', component: CommunityTimeline},
+          {pathname: '/timelines/public/union', component: UnionTimeline},
 
           {pathname: '/notifications', component: Notifications},
           {pathname: '/favourites', component: FavouritedStatuses}

@@ -40,6 +40,7 @@ class Status < ApplicationRecord
   scope :with_public_visibility, -> { where(visibility: :public) }
   scope :tagged_with, ->(tag) { joins(:statuses_tags).where(statuses_tags: { tag_id: tag }) }
   scope :local_only, -> { left_outer_joins(:account).where(accounts: { domain: nil }) }
+  scope :union_only, -> { left_outer_joins(:account).where('accounts.domain IN (?) OR accounts.domain IS NULL', ['example.com', 'example.net'] ) }
   scope :excluding_silenced_accounts, -> { left_outer_joins(:account).where(accounts: { silenced: false }) }
   scope :including_silenced_accounts, -> { left_outer_joins(:account).where(accounts: { silenced: true }) }
   scope :not_excluded_by_account, ->(account) { where.not(account_id: account.excluded_from_timeline_account_ids) }
@@ -123,14 +124,14 @@ class Status < ApplicationRecord
       where(account: [account] + account.following)
     end
 
-    def as_public_timeline(account = nil, local_only = false)
-      query = timeline_scope(local_only).without_replies
+    def as_public_timeline(account = nil, flags = {})
+      query = timeline_scope(flags).without_replies
 
       apply_timeline_filters(query, account)
     end
 
-    def as_tag_timeline(tag, account = nil, local_only = false)
-      query = timeline_scope(local_only).tagged_with(tag)
+    def as_tag_timeline(tag, account = nil, flags = {})
+      query = timeline_scope(flags).tagged_with(tag)
 
       apply_timeline_filters(query, account)
     end
@@ -181,8 +182,15 @@ class Status < ApplicationRecord
 
     private
 
-    def timeline_scope(local_only = false)
-      starting_scope = local_only ? Status.local_only : Status
+    def timeline_scope(flags = {})
+      flags = { local_only: false, union_only: false}.merge(flags)
+      if flags[:local_only].present?
+        starting_scope = Status.local_only
+      elsif flags[:union_only].present?
+        starting_scope = Status.union_only
+      else
+        starting_scope = Status
+      end
       starting_scope
         .with_public_visibility
         .without_reblogs
