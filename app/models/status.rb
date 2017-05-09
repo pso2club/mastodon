@@ -136,7 +136,7 @@ class Status < ApplicationRecord
       where(account: [account] + account.following)
     end
 
-    def as_public_timeline(account = nil, local_only = false, union_only = false))
+    def as_public_timeline(account = nil, local_only = false, union_only = false)
       query = timeline_scope(local_only, union_only).without_replies
 
       apply_timeline_filters(query, account)
