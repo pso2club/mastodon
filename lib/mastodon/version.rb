@@ -17,7 +17,7 @@ module Mastodon
     end
 
     def pre
-      nil
+      'dev-union'
     end
 
     def to_a
