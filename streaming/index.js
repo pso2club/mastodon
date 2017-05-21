@@ -357,7 +357,6 @@ if (cluster.isMaster) {
     streamFrom('timeline:public:union', req, streamToHttp(req, res), streamHttpEnd(req), true);
   });
 
-
   app.get('/api/v1/streaming/hashtag', (req, res) => {
     streamFrom(`timeline:hashtag:${req.query.tag}`, req, streamToHttp(req, res), streamHttpEnd(req), true);
   });

@@ -15,6 +15,7 @@ const messages = defineMessages({
   navigation_subheading: { id: 'column_subheading.navigation', defaultMessage: 'Navigation'},
   settings_subheading: { id: 'column_subheading.settings', defaultMessage: 'Settings'},
   community_timeline: { id: 'navigation_bar.community_timeline', defaultMessage: 'Local timeline' },
+  union_timeline: { id: 'navigation_bar.union_timeline', defaultMessage: 'Union timeline' },
   preferences: { id: 'navigation_bar.preferences', defaultMessage: 'Preferences' },
   follow_requests: { id: 'navigation_bar.follow_requests', defaultMessage: 'Follow requests' },
   sign_out: { id: 'navigation_bar.logout', defaultMessage: 'Logout' },
@@ -49,6 +50,7 @@ class GettingStarted extends ImmutablePureComponent {
         <div className='getting-started__wrapper'>
           <ColumnSubheading text={intl.formatMessage(messages.navigation_subheading)}/>
           <ColumnLink icon='users' hideOnMobile={true} text={intl.formatMessage(messages.community_timeline)} to='/timelines/public/local' />
+          <ColumnLink icon='production-hunt' hideOnMobile={true} text={intl.formatMessage(messages.union_timeline)} to='/timelines/public/union' />
           <ColumnLink icon='globe' hideOnMobile={true} text={intl.formatMessage(messages.public_timeline)} to='/timelines/public' />
           <ColumnLink icon='star' text={intl.formatMessage(messages.favourites)} to='/favourites' />
           {followRequests}
