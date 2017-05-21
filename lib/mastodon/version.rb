@@ -9,15 +9,15 @@ module Mastodon
     end
 
     def minor
-      3
+      4
     end
 
     def patch
-      3
+      0
     end
 
     def pre
-      'dev-union'
+      '2d'
     end
 
     def to_a
