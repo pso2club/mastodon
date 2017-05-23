@@ -86,7 +86,7 @@ class UnionTimeline extends React.PureComponent {
     return (
       <Column icon='product-hunt' active={hasUnread} heading={intl.formatMessage(messages.title)}>
         <ColumnBackButtonSlim />
-        <StatusListContainer {...this.props} scrollKey='union_timeline' type='union' emptyMessage={<FormattedMessage id='empty_column.union' defaultMessage='The union timeline is empty. Write something publicly to get the ball rolling!' />} />
+        <StatusListContainer {...this.props} scrollKey='union_timeline' type='union' emptyMessage={<FormattedMessage id='empty_column.union' defaultMessage='There is nothing here! Write something publicly, or manually follow users from other union instances to fill it up' />} />
       </Column>
     );
   }
