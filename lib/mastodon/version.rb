@@ -17,7 +17,7 @@ module Mastodon
     end
 
     def pre
-      '2d'
+      '3d'
     end
 
     def to_a
