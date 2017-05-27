@@ -17,7 +17,7 @@ module Mastodon
     end
 
     def pre
-      '4d'
+      '5d'
     end
 
     def to_a
