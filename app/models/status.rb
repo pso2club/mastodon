@@ -57,8 +57,9 @@ class Status < ApplicationRecord
   validates_with StatusLengthValidator
   validates :reblog, uniqueness: { scope: :account }, if: :reblog?
 
-  default_scope { order(id: :desc) }
+  default_scope { recent }
 
+  scope :recent, -> { reorder(id: :desc) }
   scope :remote, -> { where.not(uri: nil) }
   scope :local, -> { where(uri: nil) }
   scope :union, -> { where.not(uri: nil) } # need?
@@ -163,14 +164,20 @@ class Status < ApplicationRecord
       where(account: [account] + account.following)
     end
 
-    def as_public_timeline(account = nil, local_only = false, union_only = false)
-      query = timeline_scope(local_only, union_only).without_replies
+    def as_public_timeline(account = nil, local_only = false)
+      query = timeline_scope(local_only).without_replies
 
       apply_timeline_filters(query, account, local_only)
     end
 
-    def as_tag_timeline(tag, account = nil, local_only = false, union_only = false)
-      query = timeline_scope(local_only, union_only).tagged_with(tag)
+    def as_union_timeline(account = nil, local_only = false)
+      query = timeline_scope(local_only).union_only.without_replies
+      
+      apply_timeline_filters(query, account, local_only)
+    end
+
+    def as_tag_timeline(tag, account = nil, local_only = false)
+      query = timeline_scope(local_only).tagged_with(tag)
 
       apply_timeline_filters(query, account, local_only)
     end
@@ -229,14 +236,8 @@ class Status < ApplicationRecord
 
     private
 
-    def timeline_scope(local_only = false, union_only = false)
-      if local_only
-        starting_scope = Status.local_only
-      elsif union_only
-        starting_scope = Status.union_only
-      else
-        starting_scope = Status
-      end
+    def timeline_scope(local_only = false)
+      starting_scope = local_only ? Status.local_only : Status
       starting_scope
         .with_public_visibility
         .without_reblogs
