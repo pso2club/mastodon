@@ -359,8 +359,8 @@ if (cluster.isMaster) {
     streamFrom('timeline:public:local', req, streamToHttp(req, res), streamHttpEnd(req), true);
   });
 
-  app.get('/api/v1/streaming/public/union', (req, res) => {
-    streamFrom('timeline:public:union', req, streamToHttp(req, res), streamHttpEnd(req), true);
+  app.get('/api/v1/streaming/union', (req, res) => {
+    streamFrom('timeline:union', req, streamToHttp(req, res), streamHttpEnd(req), true);
   });
 
   app.get('/api/v1/streaming/hashtag', (req, res) => {
@@ -393,8 +393,8 @@ if (cluster.isMaster) {
       case 'public:local':
         streamFrom('timeline:public:local', req, streamToWs(req, ws), streamWsEnd(ws), true);
         break;
-      case 'public:union':
-        streamFrom('timeline:public:union', req, streamToWs(req, ws), streamWsEnd(ws), true)
+      case 'union':
+        streamFrom('timeline:union', req, streamToWs(req, ws), streamWsEnd(ws), true);
         break;
       case 'hashtag':
         streamFrom(`timeline:hashtag:${location.query.tag}`, req, streamToWs(req, ws), streamWsEnd(ws), true);

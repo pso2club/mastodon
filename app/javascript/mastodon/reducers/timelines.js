@@ -85,9 +85,8 @@ const initialState = Immutable.Map({
   }),
 
   union: Immutable.Map({
-    path: () => '/api/v1/timelines/public',
+    path: () => '/api/v1/timelines/union',
     next: null,
-    params: { union: true },
     isLoading: false,
     online: false,
     loaded: false,

@@ -45,7 +45,7 @@ class UnionTimeline extends React.PureComponent {
       return;
     }
 
-    subscription = createStream(streamingAPIBaseURL, accessToken, 'public:union', {
+    subscription = createStream(streamingAPIBaseURL, accessToken, 'union', {
 
       connected () {
         dispatch(connectTimeline('union'));
