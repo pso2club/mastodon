@@ -9,13 +9,13 @@ module Api::V1::Timelines
     private
 
     def load_statuses
-      cached_public_statuses.tap do |statuses|
+      cached_union_statuses.tap do |statuses|
         set_maps(statuses)
       end
     end
 
-    def cached_public_statuses
-      cache_collection public_statuses
+    def cached_union_statuses
+      cache_collection union_statuses
     end
 
     def union_statuses
