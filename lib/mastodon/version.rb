@@ -13,11 +13,11 @@ module Mastodon
     end
 
     def patch
-      0
+      1
     end
 
     def pre
-      '6d'
+      'dev-union'
     end
 
     def to_a
