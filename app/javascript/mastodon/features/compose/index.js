@@ -52,7 +52,7 @@ class Compose extends React.PureComponent {
         <div className='drawer__header'>
           <Link to='/getting-started' className='drawer__tab' title={intl.formatMessage(messages.start)}><i role="img" aria-label={intl.formatMessage(messages.start)} className='fa fa-fw fa-asterisk' /></Link>
           <Link to='/timelines/public/local' className='drawer__tab' title={intl.formatMessage(messages.community)}><i role="img" aria-label={intl.formatMessage(messages.community)} className='fa fa-fw fa-users' /></Link>
-          <Link to='/timelines/public/union' className='drawer__tab' title={intl.formatMessage(messages.union)}><i role="img" aria-label={intl.formatMessage(messages.union)} className='fa fa-fw fa-product-hunt' /></Link>
+          <Link to='/timelines/union' className='drawer__tab' title={intl.formatMessage(messages.union)}><i role="img" aria-label={intl.formatMessage(messages.union)} className='fa fa-fw fa-product-hunt' /></Link>
           <Link to='/timelines/public' className='drawer__tab' title={intl.formatMessage(messages.public)}><i role="img" aria-label={intl.formatMessage(messages.public)} className='fa fa-fw fa-globe' /></Link>
           <a href='/settings/preferences' className='drawer__tab' title={intl.formatMessage(messages.preferences)}><i role="img" aria-label={intl.formatMessage(messages.preferences)} className='fa fa-fw fa-cog' /></a>
           <a href='/auth/sign_out' className='drawer__tab' data-method='delete' title={intl.formatMessage(messages.logout)}><i role="img" aria-label={intl.formatMessage(messages.logout)} className='fa fa-fw fa-sign-out' /></a>
