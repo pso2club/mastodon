@@ -68,6 +68,6 @@ class FanOutOnWriteService < BaseService
 
     Redis.current.publish('timeline:public', @payload)
     Redis.current.publish('timeline:public:local', @payload) if status.local?
-    Redis.current.publish('timeline:public:union', @payload) if status.union?
+    Redis.current.publish('timeline:union', @payload) if status.union?
   end
 end
