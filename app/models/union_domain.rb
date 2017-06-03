@@ -17,7 +17,7 @@ class UnionDomain < ApplicationRecord
   validates :domain, presence: true, uniqueness: true, :unless => :account_id?
   validates :account_id, presence: true, uniqueness: true, :unless => :domain?
 
-  belongs_to :account, inverse_of: :union_domains
+  belongs_to :account, inverse_of: :union_domains, optional: true
 
   # has_many :accounts, foreign_key: :domain, primary_key: :domain
   # delegate :count, to: :accounts, prefix: true

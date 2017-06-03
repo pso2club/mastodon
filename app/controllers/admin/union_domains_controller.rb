@@ -27,6 +27,7 @@ module Admin
     def show; end
 
     def destroy
+      @union_domain.destroy
       # UnblockDomainService.new.call(@union_domain, retroactive_unblock?)
       redirect_to admin_union_domains_path, notice: I18n.t('admin.union_domains.destroyed_msg')
     end
