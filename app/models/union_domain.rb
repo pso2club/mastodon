@@ -17,9 +17,14 @@ class UnionDomain < ApplicationRecord
   validates :domain, presence: true, uniqueness: true, :unless => :account_id?
   validates :account_id, presence: true, uniqueness: true, :unless => :domain?
 
+  belongs_to :account, inverse_of: :union_domains, counter_cache: true
+
   # has_many :accounts, foreign_key: :domain, primary_key: :domain
   # delegate :count, to: :accounts, prefix: true
 
+  scope :domain, -> { where.not(domain: nil) }
+  scope :user, -> {where.not(account_id: nil)}
+  scope :unionizer, -> {where.not(account_id: nil)}
   # def self.blocked?(domain)
   #   where(domain: domain, severity: :suspend).exists?
   # end

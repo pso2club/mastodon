@@ -10,6 +10,7 @@ module Admin
 
     def new
       @union_domain = UnionDomain.new
+      @accounts = Account.local
     end
 
     def create
