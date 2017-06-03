@@ -78,6 +78,9 @@ class Account < ApplicationRecord
   has_many :reports
   has_many :targeted_reports, class_name: 'Report', foreign_key: :target_account_id
 
+  # UnionDomain settings
+  has_many :union_domains
+
   scope :remote, -> { where.not(domain: nil) }
   scope :local, -> { where(domain: nil) }
   scope :union, -> { where(domain: ['example.com', 'example.net']) } # need?
