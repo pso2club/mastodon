@@ -83,7 +83,6 @@ class Account < ApplicationRecord
 
   scope :remote, -> { where.not(domain: nil) }
   scope :local, -> { where(domain: nil) }
-  scope :union, -> { where(domain: ['example.com', 'example.net']) } # need?
   scope :without_followers, -> { where(followers_count: 0) }
   scope :with_followers, -> { where('followers_count > 0') }
   scope :expiring, ->(time) { where(subscription_expires_at: nil).or(where('subscription_expires_at < ?', time)).remote.with_followers }

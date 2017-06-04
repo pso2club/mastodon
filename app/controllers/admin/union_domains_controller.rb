@@ -17,7 +17,6 @@ module Admin
       @union_domain = UnionDomain.new(resource_params)
 
       if @union_domain.save
-        # DomainBlockWorker.perform_async(@union_domain.id)
         redirect_to admin_union_domains_path, notice: I18n.t('admin.union_domains.created_msg')
       else
         render :new
@@ -27,9 +26,11 @@ module Admin
     def show; end
 
     def destroy
-      @union_domain.destroy
-      # UnblockDomainService.new.call(@union_domain, retroactive_unblock?)
-      redirect_to admin_union_domains_path, notice: I18n.t('admin.union_domains.destroyed_msg')
+      if @union_domain.destroy
+        redirect_to admin_union_domains_path, notice: I18n.t('admin.union_domains.destroyed_msg')
+      else
+        redirect_to admin_union_domains_path, notice: I18n.t('admin.union_domains.delete_error_msg')
+      end
     end
 
     private
@@ -42,8 +43,5 @@ module Admin
       params.require(:union_domain).permit(:domain, :account_id)
     end
 
-    # def retroactive_unblock?
-    #   ActiveRecord::Type.lookup(:boolean).cast(resource_params[:retroactive])
-    # end
   end
 end

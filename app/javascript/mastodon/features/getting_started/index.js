@@ -50,7 +50,7 @@ class GettingStarted extends ImmutablePureComponent {
         <div className='getting-started__wrapper'>
           <ColumnSubheading text={intl.formatMessage(messages.navigation_subheading)}/>
           <ColumnLink icon='users' hideOnMobile={true} text={intl.formatMessage(messages.community_timeline)} to='/timelines/public/local' />
-          <ColumnLink icon='product-hunt' hideOnMobile={true} text={intl.formatMessage(messages.union_timeline)} to='/timelines/union' />
+          <ColumnLink icon='handshake-o' hideOnMobile={true} text={intl.formatMessage(messages.union_timeline)} to='/timelines/union' />
           <ColumnLink icon='globe' hideOnMobile={true} text={intl.formatMessage(messages.public_timeline)} to='/timelines/public' />
           <ColumnLink icon='star' text={intl.formatMessage(messages.favourites)} to='/favourites' />
           {followRequests}

@@ -22,12 +22,20 @@ class UnionDomain < ApplicationRecord
   # has_many :accounts, foreign_key: :domain, primary_key: :domain
   # delegate :count, to: :accounts, prefix: true
 
-  scope :domain, -> { where.not(domain: nil) }
-  scope :user, -> {where.not(account_id: nil)}
-  scope :unionizer, -> {where.not(account_id: nil)}
-  # def self.blocked?(domain)
-  #   where(domain: domain, severity: :suspend).exists?
-  # end
+  scope :domain, -> { select('domain').where.not(domain: nil) }
+  scope :user, -> { select('account_id').where.not(account_id: nil) }
+
+  def self.domain?(domain)
+    where(domain: domain).exists?
+  end
+
+  def self.user?(user)
+    Follow.where(account_id: self.user, target_account_id: user).exists?
+  end
+
+  def self.unionizer
+    Follow.select('target_account_id').where(account_id: user)
+  end
 
   before_validation :normalize_domain
 

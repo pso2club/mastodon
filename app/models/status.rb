@@ -29,8 +29,6 @@ class Status < ApplicationRecord
   include Streamable
   include Cacheable
 
-  @@union_domain = ['example.com', 'example.net']
-
   enum visibility: [:public, :unlisted, :private, :direct], _suffix: :visibility
 
   belongs_to :application, class_name: 'Doorkeeper::Application'
@@ -69,7 +67,8 @@ class Status < ApplicationRecord
   scope :with_public_visibility, -> { where(visibility: :public) }
   scope :tagged_with, ->(tag) { joins(:statuses_tags).where(statuses_tags: { tag_id: tag }) }
   scope :local_only, -> { left_outer_joins(:account).where(accounts: { domain: nil }) }
-  scope :union_only, -> { left_outer_joins(:account).where('accounts.domain IN (?) OR accounts.domain IS NULL', @@union_domain ) }
+  scope :union_domain, -> { left_outer_joins(:account).where(accounts: { domain: UnionDomain.domain }) }
+  scope :union_user, -> { left_outer_joins(:account).where(accounts: { id: UnionDomain.unionizer }) }
   scope :excluding_silenced_accounts, -> { left_outer_joins(:account).where(accounts: { silenced: false }) }
   scope :including_silenced_accounts, -> { left_outer_joins(:account).where(accounts: { silenced: true }) }
   scope :not_excluded_by_account, ->(account) { where.not(account_id: account.excluded_from_timeline_account_ids) }
@@ -86,12 +85,7 @@ class Status < ApplicationRecord
   end
 
   def union?
-    if local?
-      local?
-    else
-      account = Account.find(account_id)
-      @@union_domain.include?(account.domain)
-    end
+    local? || UnionDomain.domain?(account.domain) || UnionDomain.user?(account_id)
   end
 
   def reblog?
@@ -171,7 +165,7 @@ class Status < ApplicationRecord
     end
 
     def as_union_timeline(account = nil, local_only = false)
-      query = timeline_scope(local_only).union_only.without_replies
+      query = timeline_scope(local_only).union_domain.or(self.local_only.or(union_user)).without_replies
       
       apply_timeline_filters(query, account, local_only)
     end
