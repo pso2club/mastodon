@@ -15,7 +15,7 @@ import ColumnBackButtonSlim from '../../components/column_back_button_slim';
 import createStream from '../../stream';
 
 const messages = defineMessages({
-  title: { id: 'column.union', defaultMessage: 'Union timeline' },
+  title: { id: 'column.union', defaultMessage: 'PSO2 timeline' },
 });
 
 const mapStateToProps = state => ({
@@ -84,9 +84,9 @@ class UnionTimeline extends React.PureComponent {
     const { intl, hasUnread } = this.props;
 
     return (
-      <Column icon='handshake-o' active={hasUnread} heading={intl.formatMessage(messages.title)}>
+      <Column icon='product-hunt' active={hasUnread} heading={intl.formatMessage(messages.title)}>
         <ColumnBackButtonSlim />
-        <StatusListContainer {...this.props} scrollKey='union_timeline' type='union' emptyMessage={<FormattedMessage id='empty_column.union' defaultMessage='There is nothing here! Write something publicly, or manually follow users from other union instances to fill it up' />} />
+        <StatusListContainer {...this.props} scrollKey='union_timeline' type='union' emptyMessage={<FormattedMessage id='empty_column.union' defaultMessage='There is nothing here! Write something publicly, or manually follow users from other pso2 instances to fill it up' />} />
       </Column>
     );
   }
