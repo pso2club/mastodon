@@ -323,6 +323,14 @@ ActiveRecord::Schema.define(version: 20170520145338) do
     t.index ["name"], name: "index_tags_on_name", unique: true, using: :btree
   end
 
+  create_table "union_domains", force: :cascade do |t|
+    t.string   "domain"
+    t.integer  "account_id"
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.index ["domain", "account_id"], name: "index_union_domains_on_domain_and_account_id", unique: true, using: :btree
+  end
+
   create_table "users", force: :cascade do |t|
     t.string   "email",                     default: "",    null: false
     t.integer  "account_id",                                null: false

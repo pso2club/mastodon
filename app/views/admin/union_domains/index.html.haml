@@ -1,0 +1,14 @@
+- content_for :page_title do
+  = t('admin.union_domains.title')
+
+%table.table
+  %thead
+    %tr
+      %th= t('admin.union_domains.domains')
+      %th= t('admin.union_domains.accounts')
+      %th
+  %tbody
+    = render @union_domains
+
+= paginate @union_domains
+= link_to t('admin.union_domains.add_new'), new_admin_union_domain_path, class: 'button'

@@ -25,6 +25,7 @@ import Status from '../features/status';
 import GettingStarted from '../features/getting_started';
 import PublicTimeline from '../features/public_timeline';
 import CommunityTimeline from '../features/community_timeline';
+import UnionTimeline from '../features/union_timeline';
 import AccountTimeline from '../features/account_timeline';
 import AccountGallery from '../features/account_gallery';
 import HomeTimeline from '../features/home_timeline';
@@ -143,6 +144,7 @@ class Mastodon extends React.PureComponent {
               <Route path='timelines/home' component={HomeTimeline} />
               <Route path='timelines/public' component={PublicTimeline} />
               <Route path='timelines/public/local' component={CommunityTimeline} />
+              <Route path='timelines/union' component={UnionTimeline} />
               <Route path='timelines/tag/:id' component={HashtagTimeline} />
 
               <Route path='notifications' component={Notifications} />

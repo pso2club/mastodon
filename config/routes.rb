@@ -76,6 +76,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :pubsubhubbub, only: [:index]
     resources :domain_blocks, only: [:index, :new, :create, :show, :destroy]
+    resources :union_domains, only: [:index, :new, :create, :destroy]
     resource :settings, only: [:edit, :update]
     resources :instances, only: [:index]
 
@@ -139,6 +140,7 @@ Rails.application.routes.draw do
       namespace :timelines do
         resource :home, only: :show, controller: :home
         resource :public, only: :show, controller: :public
+        resource :union, only: :show, controller: :union
         resources :tag, only: :show
       end
 

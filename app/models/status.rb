@@ -60,12 +60,15 @@ class Status < ApplicationRecord
   scope :recent, -> { reorder(id: :desc) }
   scope :remote, -> { where.not(uri: nil) }
   scope :local, -> { where(uri: nil) }
+  scope :union, -> { where.not(uri: nil) } # need?
 
   scope :without_replies, -> { where('statuses.reply = FALSE OR statuses.in_reply_to_account_id = statuses.account_id') }
   scope :without_reblogs, -> { where('statuses.reblog_of_id IS NULL') }
   scope :with_public_visibility, -> { where(visibility: :public) }
   scope :tagged_with, ->(tag) { joins(:statuses_tags).where(statuses_tags: { tag_id: tag }) }
   scope :local_only, -> { left_outer_joins(:account).where(accounts: { domain: nil }) }
+  scope :union_domain, -> { left_outer_joins(:account).where(accounts: { domain: UnionDomain.domain }) }
+  scope :union_user, -> { left_outer_joins(:account).where(accounts: { id: UnionDomain.unionizer }) }
   scope :excluding_silenced_accounts, -> { left_outer_joins(:account).where(accounts: { silenced: false }) }
   scope :including_silenced_accounts, -> { left_outer_joins(:account).where(accounts: { silenced: true }) }
   scope :not_excluded_by_account, ->(account) { where.not(account_id: account.excluded_from_timeline_account_ids) }
@@ -79,6 +82,10 @@ class Status < ApplicationRecord
 
   def local?
     uri.nil?
+  end
+
+  def union?
+    local? || UnionDomain.domain?(account.domain) || UnionDomain.user?(account_id)
   end
 
   def reblog?
@@ -154,6 +161,12 @@ class Status < ApplicationRecord
     def as_public_timeline(account = nil, local_only = false)
       query = timeline_scope(local_only).without_replies
 
+      apply_timeline_filters(query, account, local_only)
+    end
+
+    def as_union_timeline(account = nil, local_only = false)
+      query = timeline_scope(local_only).union_domain.or(self.local_only.or(union_user)).without_replies
+      
       apply_timeline_filters(query, account, local_only)
     end
 

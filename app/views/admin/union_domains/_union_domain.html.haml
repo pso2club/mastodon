@@ -1,0 +1,7 @@
+%tr
+  %td.domain
+    %samp= union_domain.domain
+  %td.accounts
+    = union_domain.account.username unless union_domain.account.blank?
+  %td
+    = table_link_to 'destroy', t('admin.union_domains.delete'), admin_union_domain_path(union_domain), method: :delete

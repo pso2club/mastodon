@@ -187,6 +187,21 @@ en:
       site_title: Site title
       title: Site Settings
     title: Administration
+    union_domains:
+      accounts: Accounts
+      add_new: Add new
+      created_msg: Union instance is now created
+      delete: Delete
+      delete_error_msg: Union instance delete failed
+      destroyed_msg: Union instance has been deleted
+      domains: Domains
+      new:
+        account: Local account
+        create: Create union
+        domain: Domain
+        or: or
+        title: New display instance
+      title: Union Instances
   application_mailer:
     settings: 'Change e-mail preferences: %{link}'
     signature: Mastodon notifications from %{instance}

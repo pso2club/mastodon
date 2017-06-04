@@ -183,6 +183,21 @@ ja:
       site_title: サイトのタイトル
       title: サイト設定
     title: 管理
+    union_domains:
+      accounts: アカウント
+      add_new: 新規追加
+      created_msg: 連携表示設定を完了しました
+      delete: 削除
+      delete_error_msg: 連携表示設定の削除に失敗しました
+      destroyed_msg: 連携表示設定を削除しました
+      domains: ドメイン
+      new:
+        account: ローカルアカウント
+        create: 連携を作成
+        domain: ドメイン
+        or: または
+        title: 新規連携表示設定
+      title: 連携インスタンス
   application_mailer:
     settings: 'メール設定の変更: %{link}'
     signature: Mastodon %{instance} インスタンスからの通知

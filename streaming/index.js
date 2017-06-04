@@ -344,6 +344,10 @@ const startWorker = (workerId) => {
     streamFrom('timeline:public:local', req, streamToHttp(req, res), streamHttpEnd(req), true);
   });
 
+  app.get('/api/v1/streaming/union', (req, res) => {
+    streamFrom('timeline:union', req, streamToHttp(req, res), streamHttpEnd(req), true);
+  });
+
   app.get('/api/v1/streaming/hashtag', (req, res) => {
     streamFrom(`timeline:hashtag:${req.query.tag}`, req, streamToHttp(req, res), streamHttpEnd(req), true);
   });
@@ -379,6 +383,9 @@ const startWorker = (workerId) => {
         break;
       case 'public:local':
         streamFrom('timeline:public:local', req, streamToWs(req, ws), streamWsEnd(req, ws), true);
+        break;
+      case 'union':
+        streamFrom('timeline:union', req, streamToWs(req, ws), streamWsEnd(req, ws), true);
         break;
       case 'hashtag':
         streamFrom(`timeline:hashtag:${location.query.tag}`, req, streamToWs(req, ws), streamWsEnd(req, ws), true);

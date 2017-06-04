@@ -1,0 +1,12 @@
+- content_for :page_title do
+  = t('.title')
+
+= simple_form_for @union_domain, url: admin_union_domains_path do |f|
+  = render 'shared/error_messages', object: @union_domain
+
+  = f.input :domain, placeholder: t('.domain')
+  = t('.or')
+  = f.input :account_id, :collection => @accounts, wrapper: :with_label, :label_method => :username, :value_method => :id, :label => t('.account')
+
+  .actions
+    = f.button :button, t('.create'), type: :submit
