@@ -6,6 +6,7 @@ import HomeTimeline from '../../home_timeline';
 import Notifications from '../../notifications';
 import PublicTimeline from '../../public_timeline';
 import CommunityTimeline from '../../community_timeline';
+import UnionTimeline from '../../union_timeline';
 import HashtagTimeline from '../../hashtag_timeline';
 import Compose from '../../compose';
 
@@ -15,6 +16,7 @@ const componentMap = {
   'NOTIFICATIONS': Notifications,
   'PUBLIC': PublicTimeline,
   'COMMUNITY': CommunityTimeline,
+  'UNION' : UnionTimeline,
   'HASHTAG': HashtagTimeline,
 };
 

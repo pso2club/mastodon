@@ -53,6 +53,12 @@ const initialState = Immutable.Map({
     }),
   }),
 
+  union: Immutable.Map({
+    regex: Immutable.Map({
+      body: '',
+    }),
+  }),
+
   public: Immutable.Map({
     regex: Immutable.Map({
       body: '',
