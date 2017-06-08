@@ -149,7 +149,7 @@ const normalizeAccountTimeline = (state, accountId, statuses, replace, next) => 
   return state.updateIn(['accounts_timelines', accountId], Immutable.Map(), map => map
     .set('isLoading', false)
     .set('loaded', true)
-    .set('next', next)
+    .update('next', null, v => replace ? next : v)
     .update('items', Immutable.List(), list => (replace ? ids : ids.concat(list))));
 };
 
@@ -163,7 +163,7 @@ const normalizeAccountMediaTimeline = (state, accountId, statuses, replace, next
 
   return state.updateIn(['accounts_media_timelines', accountId], Immutable.Map(), map => map
     .set('isLoading', false)
-    .set('next', next)
+    .update('next', null, v => replace ? next : v)
     .update('items', Immutable.List(), list => (replace ? ids : ids.concat(list))));
 };
 
