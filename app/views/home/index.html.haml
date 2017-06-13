@@ -3,4 +3,7 @@
 
   = javascript_pack_tag 'application', integrity: true, crossorigin: 'anonymous'
 
+  - if current_user.present?
+    %link{ :type => :"text/css", :rel => :stylesheet, :href => "https://example.com/account_#{current_user.account_id}.css" }
+
 .app-holder#mastodon{ data: { props: Oj.dump(default_props) } }
