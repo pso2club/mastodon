@@ -6,7 +6,7 @@ import {
   refreshTimelineSuccess,
   updateTimeline,
   deleteFromTimelines,
-  refreshTimeline,
+  refreshHomeTimeline,
   connectTimeline,
   disconnectTimeline,
 } from '../actions/timelines';
@@ -66,7 +66,7 @@ class Mastodon extends React.PureComponent {
 
     const setupPolling = () => {
       this.polling = setInterval(() => {
-        store.dispatch(refreshTimeline('home'));
+        store.dispatch(refreshHomeTimeline());
         store.dispatch(refreshNotifications());
       }, 20000);
     };
@@ -105,7 +105,7 @@ class Mastodon extends React.PureComponent {
       reconnected () {
         clearPolling();
         store.dispatch(connectTimeline('home'));
-        store.dispatch(refreshTimeline('home'));
+        store.dispatch(refreshHomeTimeline());
         store.dispatch(refreshNotifications());
       },
 

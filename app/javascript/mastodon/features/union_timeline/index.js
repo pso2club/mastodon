@@ -5,7 +5,8 @@ import StatusListContainer from '../ui/containers/status_list_container';
 import Column from '../../components/column';
 import ColumnHeader from '../../components/column_header';
 import {
-  refreshTimeline,
+  refreshUnionTimeline,
+  expandUnionTimeline,
   updateTimeline,
   deleteFromTimelines,
   connectTimeline,
@@ -31,12 +32,12 @@ class UnionTimeline extends React.PureComponent {
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    intl: PropTypes.object.isRequired,
     columnId: PropTypes.string,
-    multiColumn: PropTypes.bool,
+    intl: PropTypes.object.isRequired,
     streamingAPIBaseURL: PropTypes.string.isRequired,
     accessToken: PropTypes.string.isRequired,
     hasUnread: PropTypes.bool,
+    multiColumn: PropTypes.bool,
   };
 
   handlePin = () => {
@@ -61,7 +62,7 @@ class UnionTimeline extends React.PureComponent {
   componentDidMount () {
     const { dispatch, streamingAPIBaseURL, accessToken } = this.props;
 
-    dispatch(refreshTimeline('union'));
+    dispatch(refreshUnionTimeline());
 
     if (typeof this._subscription !== 'undefined') {
       return;
@@ -106,8 +107,12 @@ class UnionTimeline extends React.PureComponent {
     this.column = c;
   }
 
+  handleLoadMore = () => {
+    this.props.dispatch(expandUnionTimeline());
+  }
+
   render () {
-    const { intl, columnId, hasUnread, multiColumn } = this.props;
+    const { intl, hasUnread, columnId, multiColumn } = this.props;
     const pinned = !!columnId;
 
     return (
@@ -126,10 +131,10 @@ class UnionTimeline extends React.PureComponent {
         </ColumnHeader>
 
         <StatusListContainer
-          {...this.props}
-          type='union'
           trackScroll={!pinned}
           scrollKey={`union_timeline-${columnId}`}
+          timelineId='union'
+          loadMore={this.handleLoadMore}
           emptyMessage={<FormattedMessage id='empty_column.union' defaultMessage='There is nothing here! Write something publicly, or manually follow users from other union instances to fill it up' />}
         />
       </Column>
