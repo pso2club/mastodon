@@ -1,12 +1,21 @@
 - content_for :page_title do
   = t('.title')
+  = link_to t('.add_domain'), new_admin_union_domain_path(mode: "domain"), class: 'button'
+  = link_to t('.add_bot'), new_admin_union_domain_path(mode: "following"), class: 'button'
+  = link_to t('.add_account'), new_admin_union_domain_path(mode: "account"), class: 'button'
 
-= simple_form_for @union_domain, url: admin_union_domains_path do |f|
-  = render 'shared/error_messages', object: @union_domain
+- if params[:mode].present?
+  = simple_form_for @union_domain, url: admin_union_domains_path do |f|
+    = render 'shared/error_messages', object: @union_domain
 
-  = f.input :domain, placeholder: t('.domain')
-  = t('.or')
-  = f.input :account_id, :collection => @accounts, wrapper: :with_label, :label_method => :username, :value_method => :id, :label => t('.account')
+    - case params[:mode]
+    - when "domain"
+      = f.input :domain, placeholder: t('.domain')
+    - when "following"
+      = f.input :account_id, :collection => @accounts, wrapper: :with_label, :label_method => :username, :value_method => :id, :label => t('.bot_account')
+      = f.input :bot, :as => :hidden, :input_html => { :value => true }
+    - when "account"
+      = f.input :account_id, :collection => @accounts, wrapper: :with_label, :label_method => lambda { |ac| "#{ac.username}@#{ac.domain}" }, :value_method => :id, :label => t('.account')
 
-  .actions
-    = f.button :button, t('.create'), type: :submit
+    .actions
+      = f.button :button, t('.create'), type: :submit

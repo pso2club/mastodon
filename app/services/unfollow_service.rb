@@ -9,11 +9,16 @@ class UnfollowService < BaseService
     return unless follow
     NotificationWorker.perform_async(build_xml(follow), source_account.id, target_account.id) unless target_account.local?
     UnmergeWorker.perform_async(target_account.id, source_account.id)
+    remove_union_domain_service(target_account.id) if UnionDomain.bot?(source_account.id)
   end
 
   private
 
   def build_xml(follow)
     AtomSerializer.render(AtomSerializer.new.unfollow_salmon(follow))
+  end
+
+  def remove_union_domain_service(account_id)
+    Account.update(account_id, { :unionmember => false })
   end
 end

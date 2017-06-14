@@ -196,18 +196,33 @@ en:
     union_domains:
       accounts: Accounts
       add_new: Add new
+      bot: Bots
       created_msg: Union instance is now created
-      delete: Delete
-      delete_error_msg: Union instance delete failed
       destroyed_msg: Union instance has been deleted
       domains: Domains
       new:
-        account: Local account
+        account: Account
+        add_account: Add account
+        add_bot: Add bot
+        add_domain: Add domain
+        bot_account: Bot account
         create: Create union
         domain: Domain
-        or: or
-        title: New display instance
+        title: New union instance
+      show:
+        affected_accounts:
+          one: One account in the database affected
+          other: "%{count} accounts in the database affected"
+        retroactive:
+          account: Non-union this existing account
+          domain: Non-union all existing accounts from this domain
+          following: Non-union all existing accounts from this bot following
+        title:
+          account: Undo union instance for %{account}@%{domain}
+          domain: Undo union instance for %{domain}
+          following: Undo union instance for %{account} bot
       title: Union Instances
+      undo: Undo
   application_mailer:
     settings: 'Change e-mail preferences: %{link}'
     signature: Mastodon notifications from %{instance}
