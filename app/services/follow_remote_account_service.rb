@@ -40,9 +40,11 @@ class FollowRemoteAccountService < BaseService
       Rails.logger.debug "Creating new remote account for #{uri}"
 
       domain_block = DomainBlock.find_by(domain: domain)
+      union_domain = UnionDomain.domain?(domain)
       account = Account.new(username: confirmed_username, domain: confirmed_domain)
       account.suspended   = true if domain_block && domain_block.suspend?
       account.silenced    = true if domain_block && domain_block.silence?
+      account.unionmember = true if union_domain
       account.private_key = nil
     else
       account = confirmed_account
@@ -61,8 +63,13 @@ class FollowRemoteAccountService < BaseService
     account.uri     = get_account_uri(xml)
     account.hub_url = hubs.first.attribute('href').value
 
-    account.save!
-    get_profile(body, account)
+    begin
+      account.save!
+      get_profile(body, account)
+    rescue ActiveRecord::RecordNotUnique
+      # The account has been added by another worker!
+      return Account.find_remote(confirmed_username, confirmed_domain)
+    end
 
     account
   end

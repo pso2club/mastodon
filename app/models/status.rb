@@ -20,7 +20,7 @@
 #  reply                  :boolean          default(FALSE)
 #  favourites_count       :integer          default(0), not null
 #  reblogs_count          :integer          default(0), not null
-#  language               :string           default("en"), not null
+#  language               :string
 #  conversation_id        :integer
 #
 
@@ -28,6 +28,7 @@ class Status < ApplicationRecord
   include Paginable
   include Streamable
   include Cacheable
+  include StatusThreadingConcern
 
   enum visibility: [:public, :unlisted, :private, :direct], _suffix: :visibility
 
@@ -60,21 +61,22 @@ class Status < ApplicationRecord
   scope :recent, -> { reorder(id: :desc) }
   scope :remote, -> { where.not(uri: nil) }
   scope :local, -> { where(uri: nil) }
-  scope :union, -> { where.not(uri: nil) } # need?
+  scope :union, -> { left_outer_joins(:account).where(accounts: { unionmember: true }) } # need?
 
   scope :without_replies, -> { where('statuses.reply = FALSE OR statuses.in_reply_to_account_id = statuses.account_id') }
   scope :without_reblogs, -> { where('statuses.reblog_of_id IS NULL') }
   scope :with_public_visibility, -> { where(visibility: :public) }
   scope :tagged_with, ->(tag) { joins(:statuses_tags).where(statuses_tags: { tag_id: tag }) }
   scope :local_only, -> { left_outer_joins(:account).where(accounts: { domain: nil }) }
-  scope :union_domain, -> { left_outer_joins(:account).where(accounts: { domain: UnionDomain.domain }) }
-  scope :union_user, -> { left_outer_joins(:account).where(accounts: { id: UnionDomain.unionizer }) }
+  scope :union_only, -> { left_outer_joins(:account).where(accounts: { unionmember: true })}
   scope :excluding_silenced_accounts, -> { left_outer_joins(:account).where(accounts: { silenced: false }) }
   scope :including_silenced_accounts, -> { left_outer_joins(:account).where(accounts: { silenced: true }) }
   scope :not_excluded_by_account, ->(account) { where.not(account_id: account.excluded_from_timeline_account_ids) }
   scope :not_domain_blocked_by_account, ->(account) { account.excluded_from_timeline_domains.blank? ? left_outer_joins(:account) : left_outer_joins(:account).where('accounts.domain IS NULL OR accounts.domain NOT IN (?)', account.excluded_from_timeline_domains) }
 
   cache_associated :account, :application, :media_attachments, :tags, :stream_entry, mentions: :account, reblog: [:account, :application, :stream_entry, :tags, :media_attachments, mentions: :account], thread: :account
+
+  delegate :domain, to: :account, prefix: true
 
   def reply?
     !in_reply_to_id.nil? || attributes['reply']
@@ -85,7 +87,7 @@ class Status < ApplicationRecord
   end
 
   def union?
-    local? || UnionDomain.domain?(account.domain) || UnionDomain.user?(account_id)
+    local? || account.unionmember?
   end
 
   def reblog?
@@ -120,26 +122,6 @@ class Status < ApplicationRecord
     private_visibility? || direct_visibility?
   end
 
-  def permitted?(other_account = nil)
-    if direct_visibility?
-      account.id == other_account&.id || mentions.where(account: other_account).exists?
-    elsif private_visibility?
-      account.id == other_account&.id || other_account&.following?(account) || mentions.where(account: other_account).exists?
-    else
-      other_account.nil? || !account.blocking?(other_account)
-    end
-  end
-
-  def ancestors(account = nil)
-    ids = Rails.cache.fetch("ancestors:#{id}") { (Status.find_by_sql(['WITH RECURSIVE search_tree(id, in_reply_to_id, path) AS (SELECT id, in_reply_to_id, ARRAY[id] FROM statuses WHERE id = ? UNION ALL SELECT statuses.id, statuses.in_reply_to_id, path || statuses.id FROM search_tree JOIN statuses ON statuses.id = search_tree.in_reply_to_id WHERE NOT statuses.id = ANY(path)) SELECT id FROM search_tree ORDER BY path DESC', id]) - [self]).pluck(:id) }
-    find_statuses_from_tree_path(ids, account)
-  end
-
-  def descendants(account = nil)
-    ids = (Status.find_by_sql(['WITH RECURSIVE search_tree(id, path) AS (SELECT id, ARRAY[id] FROM statuses WHERE id = ? UNION ALL SELECT statuses.id, path || statuses.id FROM search_tree JOIN statuses ON statuses.in_reply_to_id = search_tree.id WHERE NOT statuses.id = ANY(path)) SELECT id FROM search_tree ORDER BY path', id]) - [self]).pluck(:id)
-    find_statuses_from_tree_path(ids, account)
-  end
-
   def non_sensitive_with_media?
     !sensitive? && media_attachments.any?
   end
@@ -165,7 +147,7 @@ class Status < ApplicationRecord
     end
 
     def as_union_timeline(account = nil, local_only = false)
-      query = timeline_scope(local_only).union_domain.or(self.local_only.or(union_user)).without_replies
+      query = union_timeline_scope(local_only).without_replies
       
       apply_timeline_filters(query, account, local_only)
     end
@@ -237,6 +219,13 @@ class Status < ApplicationRecord
         .without_reblogs
     end
 
+    def union_timeline_scope(local_only = false)
+      starting_scope = local_only ? Status.local_only : Status.union_only.or(Status.local_only)
+      starting_scope
+        .with_public_visibility
+        .without_reblogs
+    end
+
     def apply_timeline_filters(query, account, local_only)
       if account.nil?
         filter_timeline_default(query)
@@ -297,24 +286,5 @@ class Status < ApplicationRecord
     else
       thread.account_id
     end
-  end
-
-  def find_statuses_from_tree_path(ids, account)
-    statuses = Status.where(id: ids).includes(:account).to_a
-
-    # FIXME: n+1 bonanza
-    statuses.reject! { |status| filter_from_context?(status, account) }
-
-    # Order ancestors/descendants by tree path
-    statuses.sort_by! { |status| ids.index(status.id) }
-  end
-
-  def filter_from_context?(status, account)
-    should_filter   = account&.blocking?(status.account_id)
-    should_filter ||= account&.domain_blocking?(status.account.domain)
-    should_filter ||= account&.muting?(status.account_id)
-    should_filter ||= (status.account.silenced? && !account&.following?(status.account_id))
-    should_filter ||= !status.permitted?(account)
-    should_filter
   end
 end

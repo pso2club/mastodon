@@ -10,6 +10,7 @@ class AfterRemoteFollowWorker
   def perform(follow_id)
     @follow = Follow.find(follow_id)
     process_follow_service if processing_required?
+    process_union_domain_service if UnionDomain.bot?(@follow.account_id)
   rescue ActiveRecord::RecordNotFound
     true
   end
@@ -19,6 +20,10 @@ class AfterRemoteFollowWorker
   def process_follow_service
     follow.destroy
     FollowService.new.call(follow.account, updated_account.acct)
+  end
+
+  def process_union_domain_service
+    Account.update(@follow.target_account_id, { :unionmember => true })
   end
 
   def updated_account
