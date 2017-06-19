@@ -66,6 +66,7 @@ class FollowRemoteAccountService < BaseService
     begin
       account.save!
       get_profile(body, account)
+      get_subscribe(account) if account.unionmember?
     rescue ActiveRecord::RecordNotUnique
       # The account has been added by another worker!
       return Account.find_remote(confirmed_username, confirmed_domain)
@@ -106,5 +107,9 @@ class FollowRemoteAccountService < BaseService
 
   def get_profile(body, account)
     RemoteProfileUpdateWorker.perform_async(account.id, body.force_encoding('UTF-8'), false)
+  end
+
+  def get_subscribe(account)
+    Pubsubhubbub::SubscribeWorker.perform_async(account.id) unless account.subscribed?
   end
 end

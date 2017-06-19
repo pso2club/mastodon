@@ -26,6 +26,7 @@ class UnionDomainService < BaseService
 
   def union_member!
     Account.update(union_domain.account.id, { :unionmember => true })
+    Pubsubhubbub::SubscribeWorker.perform_async(union_domain.account.id) unless union_domain.account.subscribed?
   end
 
   def union_accounts!

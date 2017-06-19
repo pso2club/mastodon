@@ -11,8 +11,8 @@ module Admin
     def new
       @union_domain = UnionDomain.new
       if params[:mode].present?
-        @accounts = Account.local if params[:mode] == "following"
-        @accounts = Account.remote.where(unionmember: false) if params[:mode] == "account"
+        @accounts = Account.local.order(username: :asc) if params[:mode] == "following"
+        @accounts = Account.remote.where(unionmember: false).order(domain: :asc, username: :asc) if params[:mode] == "account"
       end
     end
 
