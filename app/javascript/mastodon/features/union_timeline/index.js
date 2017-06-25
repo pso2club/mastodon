@@ -14,7 +14,6 @@ import {
 } from '../../actions/timelines';
 import { addColumn, removeColumn, moveColumn } from '../../actions/columns';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
-import ColumnBackButtonSlim from '../../components/column_back_button_slim';
 import ColumnSettingsContainer from './containers/column_settings_container';
 import createStream from '../../stream';
 
@@ -32,12 +31,12 @@ class UnionTimeline extends React.PureComponent {
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    columnId: PropTypes.string,
     intl: PropTypes.object.isRequired,
+    columnId: PropTypes.string,
+    multiColumn: PropTypes.bool,
     streamingAPIBaseURL: PropTypes.string.isRequired,
     accessToken: PropTypes.string.isRequired,
     hasUnread: PropTypes.bool,
-    multiColumn: PropTypes.bool,
   };
 
   handlePin = () => {
@@ -112,7 +111,7 @@ class UnionTimeline extends React.PureComponent {
   }
 
   render () {
-    const { intl, hasUnread, columnId, multiColumn } = this.props;
+    const { intl, columnId, hasUnread, multiColumn } = this.props;
     const pinned = !!columnId;
 
     return (
@@ -131,10 +130,10 @@ class UnionTimeline extends React.PureComponent {
         </ColumnHeader>
 
         <StatusListContainer
-          trackScroll={!pinned}
-          scrollKey={`union_timeline-${columnId}`}
           timelineId='union'
           loadMore={this.handleLoadMore}
+          trackScroll={!pinned}
+          scrollKey={`union_timeline-${columnId}`}
           emptyMessage={<FormattedMessage id='empty_column.union' defaultMessage='There is nothing here! Write something publicly, or manually follow users from other PSO2 instances to fill it up' />}
         />
       </Column>
