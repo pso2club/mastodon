@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(version: 20170720000000) do
     t.integer "followers_count", default: 0, null: false
     t.integer "following_count", default: 0, null: false
     t.datetime "last_webfingered_at"
+    t.boolean "unionmember", default: false
     t.string "inbox_url", default: "", null: false
     t.string "outbox_url", default: "", null: false
     t.string "shared_inbox_url", default: "", null: false
@@ -342,6 +343,15 @@ ActiveRecord::Schema.define(version: 20170720000000) do
     t.datetime "updated_at", null: false
     t.index "lower((name)::text) text_pattern_ops", name: "hashtag_search_index"
     t.index ["name"], name: "index_tags_on_name", unique: true
+  end
+
+  create_table "union_domains", id: :serial, force: :cascade do |t|
+    t.string   "domain"
+    t.integer  "account_id"
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.boolean "bot", default: false
+    t.index ["domain", "account_id"], name: "index_union_domains_on_domain_and_account_id", unique: true
   end
 
   create_table "users", id: :serial, force: :cascade do |t|

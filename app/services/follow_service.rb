@@ -19,6 +19,7 @@ class FollowService < BaseService
     else
       direct_follow(source_account, target_account)
     end
+
   end
 
   private

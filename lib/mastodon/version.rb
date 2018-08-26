@@ -17,7 +17,7 @@ module Mastodon
     end
 
     def pre
-      nil
+      'union'
     end
 
     def flags

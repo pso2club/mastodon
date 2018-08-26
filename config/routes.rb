@@ -89,6 +89,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :subscriptions, only: [:index]
     resources :domain_blocks, only: [:index, :new, :create, :show, :destroy]
+    resources :union_domains, only: [:index, :new, :create, :show, :destroy]
     resource :settings, only: [:edit, :update]
     
     resources :instances, only: [:index] do
@@ -161,6 +162,7 @@ Rails.application.routes.draw do
       namespace :timelines do
         resource :home, only: :show, controller: :home
         resource :public, only: :show, controller: :public
+        resource :union, only: :show, controller: :union
         resources :tag, only: :show
       end
       resources :streaming,  only: [:index]

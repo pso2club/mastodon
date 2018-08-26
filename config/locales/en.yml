@@ -210,6 +210,36 @@ en:
       title: WebSub
       topic: Topic
     title: Administration
+    union_domains:
+      accounts: Accounts
+      add_new: Add new
+      bot: Bots
+      created_msg: Union instance is now created
+      destroyed_msg: Union instance has been deleted
+      domains: Domains
+      new:
+        account: Account
+        add_account: Add account
+        add_bot: Add bot
+        add_domain: Add domain
+        bot_account: Bot account
+        create: Create union
+        domain: Domain
+        title: New union instance
+      show:
+        affected_accounts:
+          one: One account in the database affected
+          other: "%{count} accounts in the database affected"
+        retroactive:
+          account: Non-union this existing account
+          domain: Non-union all existing accounts from this domain
+          following: Non-union all existing accounts from this bot following
+        title:
+          account: Undo union instance for %{account}@%{domain}
+          domain: Undo union instance for %{domain}
+          following: Undo union instance for %{account} bot
+      title: Union Instances
+      undo: Undo
   admin_mailer:
     new_report:
       body: "%{reporter} has reported %{target}"

@@ -47,6 +47,12 @@ const initialState = ImmutableMap({
     }),
   }),
 
+  union: ImmutableMap({
+    regex: ImmutableMap({
+      body: '',
+    }),
+  }),
+
   public: ImmutableMap({
     regex: ImmutableMap({
       body: '',

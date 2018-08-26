@@ -20,6 +20,7 @@ import {
   Status,
   GettingStarted,
   PublicTimeline,
+  UnionTimeline,
   CommunityTimeline,
   AccountTimeline,
   AccountGallery,
@@ -195,6 +196,7 @@ export default class UI extends React.PureComponent {
             <WrappedRoute path='/timelines/home' component={HomeTimeline} content={children} />
             <WrappedRoute path='/timelines/public' exact component={PublicTimeline} content={children} />
             <WrappedRoute path='/timelines/public/local' component={CommunityTimeline} content={children} />
+            <WrappedRoute path='/timelines/union' component={UnionTimeline} content={children} />
             <WrappedRoute path='/timelines/tag/:id' component={HashtagTimeline} content={children} />
 
             <WrappedRoute path='/notifications' component={Notifications} content={children} />

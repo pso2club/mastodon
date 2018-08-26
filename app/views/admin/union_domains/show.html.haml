@@ -1,0 +1,21 @@
+- content_for :page_title do
+  - case @options[:mode]
+  - when "following"
+    = t('admin.union_domains.show.title.following', account: @union_domain.account.username)
+  - when "domain"
+    = t('admin.union_domains.show.title.domain', domain: @union_domain.domain)
+  - when "account"
+    = t('admin.union_domains.show.title.account', account: @union_domain.account.username, domain: @union_domain.account.domain)
+
+= simple_form_for @union_domain, url: admin_union_domain_path(@union_domain), method: :delete do |f|
+
+  = f.input :retroactive,
+    as: :boolean,
+    wrapper: :with_label,
+    label: t(".retroactive.#{@options[:mode]}"),
+    hint: t(:affected_accounts,
+      scope: [:admin, :union_domains, :show],
+      count: @options[:count])
+
+  .actions
+    = f.button :button, t('.undo'), type: :submit

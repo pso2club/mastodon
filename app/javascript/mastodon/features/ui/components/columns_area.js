@@ -10,7 +10,7 @@ import { links, getIndex, getLink } from './tabs_bar';
 import BundleContainer from '../containers/bundle_container';
 import ColumnLoading from './column_loading';
 import BundleColumnError from './bundle_column_error';
-import { Compose, Notifications, HomeTimeline, CommunityTimeline, PublicTimeline, HashtagTimeline, FavouritedStatuses } from '../../ui/util/async-components';
+import { Compose, Notifications, HomeTimeline, CommunityTimeline, UnionTimeline, PublicTimeline, HashtagTimeline, FavouritedStatuses } from '../../ui/util/async-components';
 
 const componentMap = {
   'COMPOSE': Compose,
@@ -18,6 +18,7 @@ const componentMap = {
   'NOTIFICATIONS': Notifications,
   'PUBLIC': PublicTimeline,
   'COMMUNITY': CommunityTimeline,
+  'UNION' : UnionTimeline,
   'HASHTAG': HashtagTimeline,
   'FAVOURITES': FavouritedStatuses,
 };

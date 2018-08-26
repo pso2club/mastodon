@@ -210,6 +210,36 @@ ja:
       title: WebSub
       topic: トピック
     title: 管理
+    union_domains:
+      accounts: アカウント
+      add_new: 新規追加
+      bot: Bot
+      created_msg: 連携表示設定を完了しました
+      destroyed_msg: 連携表示設定を削除しました
+      domains: ドメイン
+      new:
+        account: アカウント
+        add_account: アカウントを追加
+        add_bot: Botを追加 
+        add_domain: ドメインを追加
+        bot_account: Botアカウント
+        create: 連携を作成
+        domain: ドメイン
+        title: 新規連携表示設定
+      show:
+        affected_accounts:
+          one: データベース中の一つのアカウントに影響します
+          other: データベース中の%{count}個のアカウントに影響します
+        retroactive:
+          account: このアカウントの連携を戻す
+          domain: このドメインに所属するすべてのアカウントの連携を戻す
+          following: このアカウントがフォローするすべての連携を戻す
+        title:
+          account: '%{account}@%{domain}の連携表示を解除する'
+          domain: '%{domain}の連携表示を解除する'
+          following: '%{account}のフォローする連携表示を解除する'
+      title: 連携インスタンス
+      undo: 元に戻す
   admin_mailer:
     new_report:
       body: "%{reporter} が %{target} を通報しました"

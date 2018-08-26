@@ -36,6 +36,7 @@
 #  followers_count         :integer          default(0), not null
 #  following_count         :integer          default(0), not null
 #  last_webfingered_at     :datetime
+#  unionmember             :boolean          default(FALSE)
 #  inbox_url               :string           default(""), not null
 #  outbox_url              :string           default(""), not null
 #  shared_inbox_url        :string           default(""), not null
@@ -87,11 +88,15 @@ class Account < ApplicationRecord
   has_many :reports
   has_many :targeted_reports, class_name: 'Report', foreign_key: :target_account_id
 
+  # UnionDomain settings
+  has_many :union_domains
+
   scope :remote, -> { where.not(domain: nil) }
   scope :local, -> { where(domain: nil) }
+  scope :union, -> { where(unionmember: true) } # need?
   scope :without_followers, -> { where(followers_count: 0) }
   scope :with_followers, -> { where('followers_count > 0') }
-  scope :expiring, ->(time) { where(subscription_expires_at: nil).or(where('subscription_expires_at < ?', time)).remote.with_followers }
+  scope :expiring, ->(time) { where(subscription_expires_at: nil).or(where('subscription_expires_at < ?', time)).remote.with_followers.or(where(subscription_expires_at: nil).or(where('subscription_expires_at < ?', time)).remote.union) }
   scope :partitioned, -> { order('row_number() over (partition by domain)') }
   scope :silenced, -> { where(silenced: true) }
   scope :suspended, -> { where(suspended: true) }
