@@ -17,11 +17,11 @@ module Mastodon
     end
 
     def pre
-      'union'
+      nil
     end
 
     def flags
-      ''
+      '-union'
     end
 
     def to_a
@@ -33,12 +33,12 @@ module Mastodon
     end
 
     def source_base_url
-      'https://github.com/tootsuite/mastodon'
+      'https://github.com/pso2club/mastodon'
     end
 
     # specify git tag or commit hash here
     def source_tag
-      nil
+      'v1.6.0-union'
     end
 
     def source_url
