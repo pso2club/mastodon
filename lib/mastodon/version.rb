@@ -13,7 +13,7 @@ module Mastodon
     end
 
     def patch
-      0
+      1
     end
 
     def pre
@@ -38,7 +38,7 @@ module Mastodon
 
     # specify git tag or commit hash here
     def source_tag
-      'v1.6.0-union'
+      ['v', to_a.join('.'), flags].join
     end
 
     def source_url

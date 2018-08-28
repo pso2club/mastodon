@@ -55,7 +55,7 @@ class Status < ApplicationRecord
   has_one :notification, as: :activity, dependent: :destroy
   has_one :stream_entry, as: :activity, inverse_of: :status
 
-  validates :uri, uniqueness: true, unless: :local?
+  validates :uri, uniqueness: true, presence: true, unless: :local?
   validates :text, presence: true, unless: :reblog?
   validates_with StatusLengthValidator
   validates :reblog, uniqueness: { scope: :account }, if: :reblog?
@@ -65,14 +65,12 @@ class Status < ApplicationRecord
   scope :recent, -> { reorder(id: :desc) }
   scope :remote, -> { where(local: false).or(where.not(uri: nil)) }
   scope :local,  -> { where(local: true).or(where(uri: nil)) }
-  scope :union, -> { left_outer_joins(:account).where(accounts: { unionmember: true }) } # need?
+  scope :union,  -> { left_outer_joins(:account).where(accounts: { unionmember: true }) }
 
   scope :without_replies, -> { where('statuses.reply = FALSE OR statuses.in_reply_to_account_id = statuses.account_id') }
   scope :without_reblogs, -> { where('statuses.reblog_of_id IS NULL') }
   scope :with_public_visibility, -> { where(visibility: :public) }
   scope :tagged_with, ->(tag) { joins(:statuses_tags).where(statuses_tags: { tag_id: tag }) }
-  scope :local_only, -> { left_outer_joins(:account).where(accounts: { domain: nil }) }
-  scope :union_only, -> { left_outer_joins(:account).where(accounts: { unionmember: true })}
   scope :excluding_silenced_accounts, -> { left_outer_joins(:account).where(accounts: { silenced: false }) }
   scope :including_silenced_accounts, -> { left_outer_joins(:account).where(accounts: { silenced: true }) }
   scope :not_excluded_by_account, ->(account) { where.not(account_id: account.excluded_from_timeline_account_ids) }
@@ -233,14 +231,14 @@ class Status < ApplicationRecord
     private
 
     def timeline_scope(local_only = false)
-      starting_scope = local_only ? Status.local_only : Status
+      starting_scope = local_only ? Status.local : Status
       starting_scope
         .with_public_visibility
         .without_reblogs
     end
 
     def union_timeline_scope(local_only = false)
-      starting_scope = local_only ? Status.local_only : Status.union_only.or(Status.local_only)
+      starting_scope = local_only ? Status.local : Status.union.or(Status.local)
       starting_scope
         .with_public_visibility
         .without_reblogs
