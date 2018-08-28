@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   get '.well-known/host-meta', to: 'well_known/host_meta#show', as: :host_meta, defaults: { format: 'xml' }
   get '.well-known/webfinger', to: 'well_known/webfinger#show', as: :webfinger
   get 'manifest', to: 'manifests#show', defaults: { format: 'json' }
+  get 'intent', to: 'intents#show'
 
   devise_for :users, path: 'auth', controllers: {
     sessions:           'auth/sessions',
@@ -43,6 +44,7 @@ Rails.application.routes.draw do
     resources :statuses, only: [:show] do
       member do
         get :activity
+        get :embed
       end
     end
 
@@ -51,10 +53,16 @@ Rails.application.routes.draw do
     resource :follow, only: [:create], controller: :account_follow
     resource :unfollow, only: [:create], controller: :account_unfollow
     resource :outbox, only: [:show], module: :activitypub
+    resource :inbox, only: [:create], module: :activitypub
   end
 
+  resource :inbox, only: [:create], module: :activitypub
+
   get '/@:username', to: 'accounts#show', as: :short_account
+  get '/@:username/with_replies', to: 'accounts#show', as: :short_account_with_replies
+  get '/@:username/media', to: 'accounts#show', as: :short_account_media
   get '/@:account_username/:id', to: 'statuses#show', as: :short_account_status
+  get '/@:account_username/:id/embed', to: 'statuses#embed', as: :embed_short_account_status
 
   namespace :settings do
     resource :profile, only: [:show, :update]
@@ -75,6 +83,13 @@ Rails.application.routes.draw do
     end
 
     resource :follower_domains, only: [:show, :update]
+
+    resources :applications, except: [:edit] do
+      member do
+        post :regenerate
+      end
+    end
+
     resource :delete, only: [:show, :destroy]
 
     resources :sessions, only: [:destroy]
@@ -85,13 +100,14 @@ Rails.application.routes.draw do
 
   # Remote follow
   resource :authorize_follow, only: [:show, :create]
+  resource :share, only: [:show, :create]
 
   namespace :admin do
     resources :subscriptions, only: [:index]
     resources :domain_blocks, only: [:index, :new, :create, :show, :destroy]
     resources :union_domains, only: [:index, :new, :create, :show, :destroy]
     resource :settings, only: [:edit, :update]
-    
+
     resources :instances, only: [:index] do
       collection do
         post :resubscribe
@@ -151,6 +167,9 @@ Rails.application.routes.draw do
 
           resource :mute, only: :create
           post :unmute, to: 'mutes#destroy'
+
+          resource :pin, only: :create
+          post :unpin, to: 'pins#destroy'
         end
 
         member do
@@ -165,7 +184,8 @@ Rails.application.routes.draw do
         resource :union, only: :show, controller: :union
         resources :tag, only: :show
       end
-      resources :streaming,  only: [:index]
+
+      resources :streaming, only: [:index]
 
       get '/search', to: 'search#index', as: :search
 
@@ -200,6 +220,7 @@ Rails.application.routes.draw do
         resource :search, only: :show, controller: :search
         resources :relationships, only: :index
       end
+
       resources :accounts, only: [:show] do
         resources :statuses, only: :index, controller: 'accounts/statuses'
         resources :followers, only: :index, controller: 'accounts/follower_accounts'
@@ -218,6 +239,7 @@ Rails.application.routes.draw do
 
     namespace :web do
       resource :settings, only: [:update]
+      resource :embed, only: [:create]
       resources :push_subscriptions, only: [:create] do
         member do
           put :update
@@ -235,7 +257,7 @@ Rails.application.routes.draw do
   root 'home#index'
 
   match '*unmatched_route',
-    via: :all,
-    to: 'application#raise_not_found',
-    format: false
+        via: :all,
+        to: 'application#raise_not_found',
+        format: false
 end
