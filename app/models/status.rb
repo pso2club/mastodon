@@ -65,7 +65,7 @@ class Status < ApplicationRecord
   scope :recent, -> { reorder(id: :desc) }
   scope :remote, -> { where(local: false).or(where.not(uri: nil)) }
   scope :local,  -> { where(local: true).or(where(uri: nil)) }
-  scope :union,  -> { left_outer_joins(:account).where(accounts: { unionmember: true }) }
+  scope :union,  -> { left_outer_joins(:account).where('accounts.unionmember = TRUE OR statuses.local = TRUE OR statuses.uri IS NULL') }
 
   scope :without_replies, -> { where('statuses.reply = FALSE OR statuses.in_reply_to_account_id = statuses.account_id') }
   scope :without_reblogs, -> { where('statuses.reblog_of_id IS NULL') }
@@ -238,7 +238,7 @@ class Status < ApplicationRecord
     end
 
     def union_timeline_scope(local_only = false)
-      starting_scope = local_only ? Status.local : Status.union.or(Status.local)
+      starting_scope = local_only ? Status.local : Status.union
       starting_scope
         .with_public_visibility
         .without_reblogs
