@@ -7,15 +7,11 @@ import ColumnHeader from '../../components/column_header';
 import {
   refreshUnionTimeline,
   expandUnionTimeline,
-  updateTimeline,
-  deleteFromTimelines,
-  connectTimeline,
-  disconnectTimeline,
 } from '../../actions/timelines';
 import { addColumn, removeColumn, moveColumn } from '../../actions/columns';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import ColumnSettingsContainer from './containers/column_settings_container';
-import createStream from '../../stream';
+import { connectUnionStream } from '../../actions/streaming';
 
 const messages = defineMessages({
   title: { id: 'column.union', defaultMessage: 'Union timeline' },
@@ -23,8 +19,6 @@ const messages = defineMessages({
 
 const mapStateToProps = state => ({
   hasUnread: state.getIn(['timelines', 'union', 'unread']) > 0,
-  streamingAPIBaseURL: state.getIn(['meta', 'streaming_api_base_url']),
-  accessToken: state.getIn(['meta', 'access_token']),
 });
 
 @connect(mapStateToProps)
@@ -35,8 +29,6 @@ export default class UnionTimeline extends React.PureComponent {
     dispatch: PropTypes.func.isRequired,
     columnId: PropTypes.string,
     intl: PropTypes.object.isRequired,
-    streamingAPIBaseURL: PropTypes.string.isRequired,
-    accessToken: PropTypes.string.isRequired,
     hasUnread: PropTypes.bool,
     multiColumn: PropTypes.bool,
   };
@@ -61,46 +53,16 @@ export default class UnionTimeline extends React.PureComponent {
   }
 
   componentDidMount () {
-    const { dispatch, streamingAPIBaseURL, accessToken } = this.props;
+    const { dispatch } = this.props;
 
     dispatch(refreshUnionTimeline());
-
-    if (typeof this._subscription !== 'undefined') {
-      return;
-    }
-
-    this._subscription = createStream(streamingAPIBaseURL, accessToken, 'union', {
-
-      connected () {
-        dispatch(connectTimeline('union'));
-      },
-
-      reconnected () {
-        dispatch(connectTimeline('union'));
-      },
-
-      disconnected () {
-        dispatch(disconnectTimeline('union'));
-      },
-
-      received (data) {
-        switch(data.event) {
-        case 'update':
-          dispatch(updateTimeline('union', JSON.parse(data.payload)));
-          break;
-        case 'delete':
-          dispatch(deleteFromTimelines(data.payload));
-          break;
-        }
-      },
-
-    });
+    this.disconnect = dispatch(connectUnionStream());
   }
 
   componentWillUnmount () {
-    if (typeof this._subscription !== 'undefined') {
-      this._subscription.close();
-      this._subscription = null;
+    if (this.disconnect) {
+      this.disconnect();
+      this.disconnect = null;
     }
   }
 

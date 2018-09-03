@@ -48,6 +48,7 @@ function refreshHomeTimelineAndNotification (dispatch) {
 
 export const connectUserStream = () => connectTimelineStream('home', 'user', refreshHomeTimelineAndNotification);
 export const connectCommunityStream = () => connectTimelineStream('community', 'public:local');
+export const connectUnionStream = () => connectTimelineStream('union', 'public');
 export const connectMediaStream = () => connectTimelineStream('community', 'public:local');
 export const connectPublicStream = () => connectTimelineStream('public', 'public');
 export const connectHashtagStream = (tag) => connectTimelineStream(`hashtag:${tag}`, `hashtag&tag=${tag}`);
