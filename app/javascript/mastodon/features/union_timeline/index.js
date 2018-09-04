@@ -102,7 +102,7 @@ export default class UnionTimeline extends React.PureComponent {
   handleSettingChanged = (key, checked) => {
     const { columnId } = this.props;
     if (!columnId && key[0] === 'other' && key[1] === 'onlyMedia') {
-      this.context.router.history.replace(`/timelines/public${checked ? '/media' : ''}`);
+      this.context.router.history.replace(`/timelines/union${checked ? '/media' : ''}`);
     }
   }
 
@@ -122,7 +122,7 @@ export default class UnionTimeline extends React.PureComponent {
           pinned={pinned}
           multiColumn={multiColumn}
         >
-          <ColumnSettingsContainer />
+          <ColumnSettingsContainer onChange={this.handleSettingChanged} columnId={columnId} />
         </ColumnHeader>
 
         <StatusListContainer
