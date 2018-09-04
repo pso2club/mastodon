@@ -1,24 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import StatusListContainer from '../ui/containers/status_list_container';
 import Column from '../../components/column';
 import ColumnHeader from '../../components/column_header';
-import {
-  refreshUnionTimeline,
-  expandUnionTimeline,
-} from '../../actions/timelines';
-import { addColumn, removeColumn, moveColumn } from '../../actions/columns';
-import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
+import { expandUnionTimeline } from '../../actions/timelines';
+import { addColumn, removeColumn, moveColumn, changeColumnParams } from '../../actions/columns';
 import ColumnSettingsContainer from './containers/column_settings_container';
+// import SectionHeadline from '../community_timeline/components/section_headline';
 import { connectUnionStream } from '../../actions/streaming';
 
 const messages = defineMessages({
   title: { id: 'column.union', defaultMessage: 'Union timeline' },
 });
 
-const mapStateToProps = state => ({
-  hasUnread: state.getIn(['timelines', 'union', 'unread']) > 0,
+const mapStateToProps = (state, { onlyMedia }) => ({
+  hasUnread: state.getIn(['timelines', `union${onlyMedia ? ':media' : ''}`, 'unread']) > 0,
 });
 
 @connect(mapStateToProps)
@@ -31,15 +29,16 @@ export default class UnionTimeline extends React.PureComponent {
     intl: PropTypes.object.isRequired,
     hasUnread: PropTypes.bool,
     multiColumn: PropTypes.bool,
+    onlyMedia: PropTypes.bool,
   };
 
   handlePin = () => {
-    const { columnId, dispatch } = this.props;
+    const { columnId, dispatch, onlyMedia } = this.props;
 
     if (columnId) {
       dispatch(removeColumn(columnId));
     } else {
-      dispatch(addColumn('UNION', {}));
+      dispatch(addColumn('UNION', { other: { onlyMedia } }));
     }
   }
 
@@ -53,10 +52,20 @@ export default class UnionTimeline extends React.PureComponent {
   }
 
   componentDidMount () {
-    const { dispatch } = this.props;
+    const { dispatch, onlyMedia } = this.props;
 
-    dispatch(refreshUnionTimeline());
-    this.disconnect = dispatch(connectUnionStream());
+    dispatch(expandUnionTimeline({ onlyMedia }));
+    this.disconnect = dispatch(connectUnionStream({ onlyMedia }));
+  }
+
+  componentDidUpdate (prevProps) {
+    if (prevProps.onlyMedia !== this.props.onlyMedia) {
+      const { dispatch, onlyMedia } = this.props;
+
+      this.disconnect();
+      dispatch(expandUnionTimeline({ onlyMedia }));
+      this.disconnect = dispatch(connectUnionStream({ onlyMedia }));
+    }
   }
 
   componentWillUnmount () {
@@ -70,13 +79,34 @@ export default class UnionTimeline extends React.PureComponent {
     this.column = c;
   }
 
-  handleLoadMore = () => {
-    this.props.dispatch(expandUnionTimeline());
+  handleLoadMore = maxId => {
+    const { dispatch, onlyMedia } = this.props;
+
+    dispatch(expandUnionTimeline({ maxId, onlyMedia }));
+  }
+
+  handleHeadlineLinkClick = e => {
+    const { columnId, dispatch } = this.props;
+    const onlyMedia = /\/media$/.test(e.currentTarget.href);
+
+    dispatch(changeColumnParams(columnId, { other: { onlyMedia } }));
   }
 
   render () {
-    const { intl, hasUnread, columnId, multiColumn } = this.props;
+    const { intl, hasUnread, columnId, multiColumn, onlyMedia } = this.props;
     const pinned = !!columnId;
+
+    // pending
+    //
+    // const headline = (
+    //   <SectionHeadline
+    //     timelineId='union'
+    //     to='/timelines/union'
+    //     pinned={pinned}
+    //     onlyMedia={onlyMedia}
+    //     onClick={this.handleHeadlineLinkClick}
+    //   />
+    // );
 
     return (
       <Column ref={this.setRef}>
