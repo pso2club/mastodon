@@ -8,7 +8,7 @@ import ColumnHeader from '../../components/column_header';
 import { expandUnionTimeline } from '../../actions/timelines';
 import { addColumn, removeColumn, moveColumn, changeColumnParams } from '../../actions/columns';
 import ColumnSettingsContainer from './containers/column_settings_container';
-// import SectionHeadline from '../community_timeline/components/section_headline';
+import SectionHeadline from '../community_timeline/components/section_headline';
 import { connectUnionStream } from '../../actions/streaming';
 
 const messages = defineMessages({
@@ -22,6 +22,10 @@ const mapStateToProps = (state, { onlyMedia }) => ({
 @connect(mapStateToProps)
 @injectIntl
 export default class UnionTimeline extends React.PureComponent {
+
+  static defaultProps = {
+    onlyMedia: false,
+  };
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -96,17 +100,15 @@ export default class UnionTimeline extends React.PureComponent {
     const { intl, hasUnread, columnId, multiColumn, onlyMedia } = this.props;
     const pinned = !!columnId;
 
-    // pending
-    //
-    // const headline = (
-    //   <SectionHeadline
-    //     timelineId='union'
-    //     to='/timelines/union'
-    //     pinned={pinned}
-    //     onlyMedia={onlyMedia}
-    //     onClick={this.handleHeadlineLinkClick}
-    //   />
-    // );
+    const headline = (
+      <SectionHeadline
+        timelineId='union'
+        to='/timelines/union'
+        pinned={pinned}
+        onlyMedia={onlyMedia}
+        onClick={this.handleHeadlineLinkClick}
+      />
+    );
 
     return (
       <Column ref={this.setRef}>
@@ -124,9 +126,11 @@ export default class UnionTimeline extends React.PureComponent {
         </ColumnHeader>
 
         <StatusListContainer
+          prepend={headline}
+          alwaysPrepend
           trackScroll={!pinned}
           scrollKey={`union_timeline-${columnId}`}
-          timelineId='union'
+          timelineId={`union${onlyMedia ? ':media' : ''}`}
           loadMore={this.handleLoadMore}
           emptyMessage={<FormattedMessage id='empty_column.union' defaultMessage='There is nothing here! Write something publicly, or manually follow users from other union instances to fill it up' />}
         />
