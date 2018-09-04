@@ -131,7 +131,7 @@ export default class UnionTimeline extends React.PureComponent {
           trackScroll={!pinned}
           scrollKey={`union_timeline-${columnId}`}
           timelineId={`union${onlyMedia ? ':media' : ''}`}
-          loadMore={this.handleLoadMore}
+          onLoadMore={this.handleLoadMore}
           emptyMessage={<FormattedMessage id='empty_column.union' defaultMessage='There is nothing here! Write something publicly, or manually follow users from other union instances to fill it up' />}
         />
       </Column>
