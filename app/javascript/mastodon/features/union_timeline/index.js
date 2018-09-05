@@ -39,6 +39,7 @@ export default class UnionTimeline extends React.PureComponent {
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
+    shouldUpdateScroll: PropTypes.func,
     columnId: PropTypes.string,
     intl: PropTypes.object.isRequired,
     hasUnread: PropTypes.bool,
@@ -107,11 +108,11 @@ export default class UnionTimeline extends React.PureComponent {
   }
 
   render () {
-    const { intl, hasUnread, columnId, multiColumn, onlyMedia } = this.props;
+    const { intl, shouldUpdateScroll, hasUnread, columnId, multiColumn, onlyMedia } = this.props;
     const pinned = !!columnId;
 
     return (
-      <Column ref={this.setRef}>
+      <Column ref={this.setRef} label={intl.formatMessage(messages.title)}>
         <ColumnHeader
           icon='handshake-o'
           active={hasUnread}
@@ -131,6 +132,7 @@ export default class UnionTimeline extends React.PureComponent {
           timelineId={`union${onlyMedia ? ':media' : ''}`}
           onLoadMore={this.handleLoadMore}
           emptyMessage={<FormattedMessage id='empty_column.union' defaultMessage='There is nothing here! Write something publicly, or manually follow users from other union instances to fill it up' />}
+          shouldUpdateScroll={shouldUpdateScroll}
         />
       </Column>
     );
