@@ -11,7 +11,7 @@ import ColumnSettingsContainer from './containers/column_settings_container';
 import { connectUnionStream } from '../../actions/streaming';
 
 const messages = defineMessages({
-  title: { id: 'column.union', defaultMessage: 'Union timeline' },
+  title: { id: 'column.union', defaultMessage: 'PSO2 timeline' },
 });
 
 const mapStateToProps = (state, { onlyMedia, columnId }) => {
@@ -114,7 +114,7 @@ export default class UnionTimeline extends React.PureComponent {
     return (
       <Column ref={this.setRef} label={intl.formatMessage(messages.title)}>
         <ColumnHeader
-          icon='handshake-o'
+          icon='product-hunt'
           active={hasUnread}
           title={intl.formatMessage(messages.title)}
           onPin={this.handlePin}
@@ -131,7 +131,7 @@ export default class UnionTimeline extends React.PureComponent {
           scrollKey={`union_timeline-${columnId}`}
           timelineId={`union${onlyMedia ? ':media' : ''}`}
           onLoadMore={this.handleLoadMore}
-          emptyMessage={<FormattedMessage id='empty_column.union' defaultMessage='There is nothing here! Write something publicly, or manually follow users from other union instances to fill it up' />}
+          emptyMessage={<FormattedMessage id='empty_column.union' defaultMessage='There is nothing here! Write something publicly, or manually follow users from other PSO2 instances to fill it up' />}
           shouldUpdateScroll={shouldUpdateScroll}
         />
       </Column>

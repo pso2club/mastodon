@@ -19,7 +19,7 @@ const messages = defineMessages({
   public_timeline: { id: 'navigation_bar.public_timeline', defaultMessage: 'Federated timeline' },
   settings_subheading: { id: 'column_subheading.settings', defaultMessage: 'Settings' },
   community_timeline: { id: 'navigation_bar.community_timeline', defaultMessage: 'Local timeline' },
-  union_timeline: { id: 'navigation_bar.union_timeline', defaultMessage: 'Union timeline' },
+  union_timeline: { id: 'navigation_bar.union_timeline', defaultMessage: 'PSO2 timeline' },
   direct: { id: 'navigation_bar.direct', defaultMessage: 'Direct messages' },
   preferences: { id: 'navigation_bar.preferences', defaultMessage: 'Preferences' },
   follow_requests: { id: 'navigation_bar.follow_requests', defaultMessage: 'Follow requests' },
@@ -87,7 +87,7 @@ export default class GettingStarted extends ImmutablePureComponent {
       navItems.push(
         <ColumnSubheading key={i++} text={intl.formatMessage(messages.discover)} />,
         <ColumnLink key={i++} icon='users' text={intl.formatMessage(messages.community_timeline)} to='/timelines/public/local' />,
-        <ColumnLink key={i++} icon='handshake-o' text={intl.formatMessage(messages.union_timeline)} to='/timelines/union' />,
+        <ColumnLink key={i++} icon='product-hunt' text={intl.formatMessage(messages.union_timeline)} to='/timelines/union' />,
         <ColumnLink key={i++} icon='globe' text={intl.formatMessage(messages.public_timeline)} to='/timelines/public' />,
         <ColumnSubheading key={i++} text={intl.formatMessage(messages.personal)} />
       );
