@@ -21,7 +21,7 @@ module Mastodon
     end
 
     def flags
-      '-union'
+      '-pso2'
     end
 
     def to_a

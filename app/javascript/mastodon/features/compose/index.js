@@ -20,7 +20,7 @@ const messages = defineMessages({
   notifications: { id: 'tabs_bar.notifications', defaultMessage: 'Notifications' },
   public: { id: 'navigation_bar.public_timeline', defaultMessage: 'Federated timeline' },
   community: { id: 'navigation_bar.community_timeline', defaultMessage: 'Local timeline' },
-  union: { id: 'navigation_bar.union_timeline', defaultMessage: 'Union timeline' },
+  union: { id: 'navigation_bar.union_timeline', defaultMessage: 'PSO2 timeline' },
   preferences: { id: 'navigation_bar.preferences', defaultMessage: 'Preferences' },
   logout: { id: 'navigation_bar.logout', defaultMessage: 'Logout' },
   compose: { id: 'navigation_bar.compose', defaultMessage: 'Compose new toot' },
@@ -88,7 +88,7 @@ export default class Compose extends React.PureComponent {
             <Link to='/timelines/public/local' className='drawer__tab' title={intl.formatMessage(messages.community)} aria-label={intl.formatMessage(messages.community)}><i role='img' className='fa fa-fw fa-users' /></Link>
           )}
           {!columns.some(column => column.get('id') === 'UNION') && (
-            <Link to='/timelines/union' className='drawer__tab' title={intl.formatMessage(messages.union)} aria-label={intl.formatMessage(messages.union)}><i role='img' className='fa fa-fw fa-handshake-o' /></Link>
+            <Link to='/timelines/union' className='drawer__tab' title={intl.formatMessage(messages.union)} aria-label={intl.formatMessage(messages.union)}><i role='img' className='fa fa-fw fa-product-hunt' /></Link>
           )}
           {!columns.some(column => column.get('id') === 'PUBLIC') && (
             <Link to='/timelines/public' className='drawer__tab' title={intl.formatMessage(messages.public)} aria-label={intl.formatMessage(messages.public)}><i role='img' className='fa fa-fw fa-globe' /></Link>
