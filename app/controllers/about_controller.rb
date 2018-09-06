@@ -35,7 +35,7 @@ class AboutController < ApplicationController
 
   def initial_state_params
     {
-      settings: { known_fediverse: Setting.show_known_fediverse_at_about_page },
+      settings: { known_fediverse: Setting.show_known_fediverse_at_about_page , known_union: Setting.show_known_union_at_about_page },
       token: current_session&.token,
     }
   end
