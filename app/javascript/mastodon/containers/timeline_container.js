@@ -27,14 +27,16 @@ export default class TimelineContainer extends React.PureComponent {
     locale: PropTypes.string.isRequired,
     hashtag: PropTypes.string,
     showPublicTimeline: PropTypes.bool.isRequired,
+    showUnionTimeline: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
     showPublicTimeline: initialState.settings.known_fediverse,
+    showUnionTimeline: initialState.settings.known_union,
   };
 
   render () {
-    const { locale, hashtag, showPublicTimeline } = this.props;
+    const { locale, hashtag, showPublicTimeline, showUnionTimeline } = this.props;
 
     let timeline;
 
@@ -42,6 +44,8 @@ export default class TimelineContainer extends React.PureComponent {
       timeline = <HashtagTimeline hashtag={hashtag} />;
     } else if (showPublicTimeline) {
       timeline = <PublicTimeline />;
+    } else if (showUnionTimeline) {
+      timeline = <UnionTimeline />;
     } else {
       timeline = <CommunityTimeline />;
     }
