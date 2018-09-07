@@ -5,10 +5,12 @@ module Admin
     before_action :set_union_domain, only: [:show, :destroy]
 
     def index
+      authorize :union_domain, :index?
       @union_domains = UnionDomain.page(params[:page])
     end
 
     def new
+      authorize :union_domain, :create?
       @union_domain = UnionDomain.new
       if params[:mode].present?
         @accounts = Account.local.order(username: :asc) if params[:mode] == "following"
@@ -17,20 +19,27 @@ module Admin
     end
 
     def create
+      authorize :union_domain, :create?
+
       @union_domain = UnionDomain.new(resource_params)
 
       if @union_domain.save
         UnionDomainWorker.perform_async(@union_domain.id)
+        log_action :create, @union_domain
         redirect_to admin_union_domains_path, notice: I18n.t('admin.union_domains.created_msg')
       else
         render :new
       end
     end
 
-    def show; end
+    def show
+      authorize @union_domain, :show?
+    end
 
     def destroy
+      authorize @union_domain, :destroy?
       RemoveUnionDomainService.new.call(@union_domain, retroactive_remove?)
+      log_action :destroy, @union_domain
       redirect_to admin_union_domains_path, notice: I18n.t('admin.union_domains.destroyed_msg')
     end
 
@@ -55,6 +64,5 @@ module Admin
     def retroactive_remove?
       ActiveRecord::Type.lookup(:boolean).cast(resource_params[:retroactive])
     end
-
   end
 end
