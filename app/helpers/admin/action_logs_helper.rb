@@ -55,6 +55,8 @@ module Admin::ActionLogsHelper
       log.recorded_changes.slice('severity', 'reject_media')
     elsif log.target_type == 'Status' && log.action == :update
       log.recorded_changes.slice('sensitive')
+    elsif log.target_type == 'UnionDomain'
+      log.recorded_changes.slice('domain', 'account_id', 'bot')
     end
   end
 
@@ -81,6 +83,8 @@ module Admin::ActionLogsHelper
       'envelope'
     when 'Status'
       'pencil'
+    when 'UnionDomain'
+      'handshake-o'
     end
   end
 
