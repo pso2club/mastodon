@@ -36,6 +36,11 @@
       %li= filter_link_to t('admin.accounts.moderation.all'), staff: nil
       %li= filter_link_to t('admin.accounts.roles.staff'), staff: '1'
   .filter-subset
+    %strong= t('admin.accounts.union.title')
+    %ul
+      %li= filter_link_to t('admin.accounts.union.all'), union: nil
+      %li= filter_link_to t('admin.accounts.union.members'), union: 1
+  .filter-subset
     %strong= t('admin.accounts.order.title')
     %ul
       %li= filter_link_to t('admin.accounts.order.alphabetic'), recent: nil
@@ -61,6 +66,7 @@
       %tr
         %th= t('admin.accounts.username')
         %th= t('admin.accounts.domain')
+        %th
         %th
         %th
     %tbody

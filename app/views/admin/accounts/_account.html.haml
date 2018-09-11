@@ -13,6 +13,9 @@
     - else
       = account.protocol.humanize
   %td
+    - if account.local? || account.union?
+      %i.fa.fa-handshake-o
+  %td
     = table_link_to 'circle', t('admin.accounts.web'), web_path("accounts/#{account.id}")
     = table_link_to 'globe', t('admin.accounts.public'), TagManager.instance.url_for(account)
     = table_link_to 'pencil', t('admin.accounts.edit'), admin_account_path(account.id)
