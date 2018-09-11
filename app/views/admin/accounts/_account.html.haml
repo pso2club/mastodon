@@ -13,7 +13,7 @@
     - else
       = account.protocol.humanize
   %td
-    - if account.local? || account.union?
+    - if account.union?
       %i.fa.fa-handshake-o
   %td
     = table_link_to 'circle', t('admin.accounts.web'), web_path("accounts/#{account.id}")

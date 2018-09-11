@@ -44,4 +44,12 @@ class AccountPolicy < ApplicationPolicy
   def memorialize?
     admin? && !record.user&.admin?
   end
+
+  def unionize?
+    staff?
+  end
+
+  def undo_unionize?
+    staff?
+  end
 end

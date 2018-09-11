@@ -223,6 +223,18 @@ class Account < ApplicationRecord
     end
   end
 
+  def unionize!
+    transaction do
+      update!(unionmember: true)
+    end
+  end
+
+  def undo_unionize!
+    transaction do
+      update!(unionmember: false)
+    end
+  end
+
   def keypair
     @keypair ||= OpenSSL::PKey::RSA.new(private_key || public_key)
   end

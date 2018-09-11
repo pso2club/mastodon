@@ -165,6 +165,8 @@ en:
         all: All
         members: Members
         title: Union
+        unionize: Add Union
+        undo_unionize: Del Union
       unsubscribe: Unsubscribe
       username: Username
       web: Web

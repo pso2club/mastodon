@@ -2,7 +2,7 @@
 
 module Admin
   class AccountsController < BaseController
-    before_action :set_account, only: [:show, :subscribe, :unsubscribe, :redownload, :remove_avatar, :enable, :disable, :memorialize]
+    before_action :set_account, only: [:show, :subscribe, :unsubscribe, :redownload, :remove_avatar, :enable, :disable, :memorialize, :unionize, :undo_unionize]
     before_action :require_remote_account!, only: [:subscribe, :unsubscribe, :redownload]
     before_action :require_local_account!, only: [:enable, :disable, :memorialize]
 
@@ -15,6 +15,7 @@ module Admin
       authorize @account, :show?
       @account_moderation_note = current_account.account_moderation_notes.new(target_account: @account)
       @moderation_notes = @account.targeted_moderation_notes.latest
+      @union_domains = UnionDomain.domain
     end
 
     def subscribe
@@ -68,6 +69,22 @@ module Admin
 
       log_action :remove_avatar, @account.user
 
+      redirect_to admin_account_path(@account.id)
+    end
+
+    def unionize
+      authorize @account, :unionize?
+      @account.unionize!
+      # @account.save!
+      log_action :unionize, @account
+      redirect_to admin_account_path(@account.id)
+    end
+
+    def undo_unionize
+      authorize @account, :undo_unionize?
+      @account.undo_unionize!
+      # @account.save!
+      log_action :undo_unionize, @account
       redirect_to admin_account_path(@account.id)
     end
 
