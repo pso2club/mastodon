@@ -172,6 +172,8 @@ Rails.application.routes.draw do
         post :redownload
         post :remove_avatar
         post :memorialize
+        post :unionize
+        post :undo_unionize
       end
 
       resource :change_email, only: [:show, :update]

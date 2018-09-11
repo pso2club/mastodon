@@ -165,6 +165,8 @@ ja:
         all: すべて
         members: 連携済み
         title: 連携
+        unionize: 連携する
+        undo_unionize: 連携を解除
       unsubscribe: 購読の解除
       username: ユーザー名
       web: Web
