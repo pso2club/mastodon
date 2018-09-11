@@ -161,6 +161,10 @@ ja:
       unconfirmed_email: 確認待ちのメールアドレス
       undo_silenced: サイレンスから戻す
       undo_suspension: 停止から戻す
+      union:
+        all: すべて
+        members: 連携済み
+        title: 連携
       unsubscribe: 購読の解除
       username: ユーザー名
       web: Web

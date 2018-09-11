@@ -159,6 +159,10 @@ class Account < ApplicationRecord
     domain.nil?
   end
 
+  def union?
+    unionmember?
+  end
+
   def moved?
     moved_to_account_id.present?
   end

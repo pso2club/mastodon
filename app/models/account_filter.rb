@@ -47,6 +47,8 @@ class AccountFilter
       end
     when 'staff'
       accounts_with_users.merge User.staff
+    when 'union'
+      Account.local.or(Account.union)
     else
       raise "Unknown filter: #{key}"
     end
