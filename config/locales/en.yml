@@ -13,8 +13,66 @@ en:
     contact_unavailable: N/A
     documentation: Documentation
     extended_description_html: |
-      <h3>A good place for rules</h3>
-      <p>The extended description has not been set up yet.</p>
+      <h3><i class="fa fa-user-circle" aria-hidden="true"></i>About usage</h3>
+      <ul>
+        <li>No cost to register and use.</li>
+        <li><em>DO NOT POST CONTENT THAT CONFLICTS WITH JAPANESE DOMESTIC LAW.</em></li>
+        <li>Please follow the official <a href="http://pso2.jp/players/support/rule/copyright/" target="_blank">copyright usage guidelines(ja)</a>when posting images and movies of PSO2JP</li>
+        <li>When posting dangerous/NSFW content, please make use of the some function of Mastodon and try to pay attention to other users.</li>
+        <li>Do not bother. In case of malicious, you may BAN.</li>
+        <li>Please do not act to put excessive load on the server.</li>
+        <li>The administrator is not responsible for the contents of the submission and the result thereof.</li>
+        <li>Announcement will be Japanese only.</li>
+      </ul>
+      
+      <br>
+      <h3><i class="fa fa-plus-circle" aria-hidden="true"></i>About registration</h3>
+      <ul>
+        <li><em>E-mail</em>, <em>user name</em>, and <em>password</em> are required for registration. <em>Please be careful not to enter SEGA ID</em> because the username will be exposed like <em>@username</em>.</li>
+        <li>We will send you an e-mail with confirmation link after registration. When registering provider mails, please make sure that you can receive mail from the <em>pso2.club</em> domain beforehand.</li>
+        <li>By accessing the confirmation link within 48 hours from registration, you can use your account. Registration information will be deleted after 48 hours, please register again.</li>
+        <li>If you do not receive a confirmation email after registration, please make a request for <a href="/auth/confirmation/new">retransmission from here</a> after confirming that is not classified as spam mail.</li>
+        <li>We will properly use the information we keep. For details, please see the privacy policy.</li>
+      </ul>
+      
+      <br>
+      <h3><i class="fa fa-server" aria-hidden="true"></i>About service operation</h3>
+      <ul>
+        <li>For testing. service may be suspended or initialized without notice.(already some times...)</li>
+        <li>If you need help, please contact us by DM at <a href="https://pso2.club/@info">@info</a> or email us or Twitter(<a href="https://twitter.com/pso2_club" target="_blank">@pso2_club</a>) <em>WITH a registered e-mail address</em>. In addition, we do not guarantee correspondence to all inquiries.</li>
+        <li>We respond promptly to inquiries from copyright holders.</li>
+      </ul>
+      
+      <br>
+      <h3><i class="fa fa-android" aria-hidden="true"></i>About BOT</h3>
+      <ul>
+        <li>Be sure to display the BOT badge on bot profile.</li>
+        <li>Please be sure to state the contact information on the profile(e.g. label, link to account on other instance)</li>
+        <li>Please contact the admin beforehand if BOT are following, follow-up to other instance users.</li>
+      </ul>
+      
+      <br>
+      <h3><i class="fa fa-product-hunt" aria-hidden="true"></i>About PSO2 Timeline</h3>
+      <p>It is an experimental function to display only those posted on PSO 2 related instance from the federation timeline.</p>
+      <p>Those who have an account of another instance and can cooperate with the experiment, please follow up request to<a href="/@union">this account</a>. Follow back automatically.</p>
+      <p><small>Although the source code after change is <a href="https://github.com/pso2club/mastodon">released</a>based on AGPLv 3, there are some hard code and unnecessary code.</small></p>
+      
+      <br>
+      <h3><i class="fa fa-money" aria-hidden="true"></i>About donation</h3>
+      <p>@Gargron(Eugen Rochko), the original author of Mastodon, accepts Mastodon's development and donation to the operation of mastodon.social at<a href="https://www.patreon.com/user?u=619786" target="_blank">Patreon</a>(en).</p>
+      
+      <br>
+      <h3><i class="fa fa-users" aria-hidden="true"></i>Accounts for this instance</h3>
+      <p>A list of local accounts can be checked from <a href="/users/users/following">here</a></p>
+      
+      <br>
+      <h3><i class="fa fa-external-link" aria-hidden="true"></i>Other instances related to PSO2 (out of order &amp; honorific title shortly)</h3>
+      <ul>
+        <li><a href="https://eletusk.club/" target="_blank">eletusk(eletusk.club)</a></li>
+        <!-- <li><a href="https://psodon.com/" target="_blank">psodon(psodon.com)</a></li> -->
+        <!-- <li><a href="https://pso2-ship10.m.to/" target="_blank">Nauthiz user instance(pso2-ship10.m.to)</a></li> -->
+        <!-- <li><a href="https://mstdn-pso2.online/" target="_blank">(mstdn-pso2.online)</a></li> -->
+      </ul>
     features:
       humane_approach_body: Learning from failures of other networks, Mastodon aims to make ethical design choices to combat the misuse of social media.
       humane_approach_title: A more humane approach
@@ -24,7 +82,7 @@ en:
       real_conversation_title: Built for real conversation
       within_reach_body: Multiple apps for iOS, Android, and other platforms thanks to a developer-friendly API ecosystem allow you to keep up with your friends anywhere.
       within_reach_title: Always within reach
-    generic_description: "%{domain} is one server in the network"
+    generic_description: "Mastodon for PSO2JP users instance (unofficial). I made it because I felt like I heard that it would be nice if there was a PSO2 users timeline. **Not involved PSO2 official and SEGA Games Co., Ltd.**"
     hosted_on: Mastodon hosted on %{domain}
     learn_more: Learn more
     other_instances: Instance list

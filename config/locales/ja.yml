@@ -13,8 +13,65 @@ ja:
     contact_unavailable: N/A
     documentation: ドキュメント
     extended_description_html: |
-      <h3>ルールを書くのに適した場所</h3>
-      <p>詳細説明が設定されていません。</p>
+      <h3><i class="fa fa-user-circle" aria-hidden="true"></i>利用について</h3>
+      <ul>
+        <li>登録や利用に費用はかかりません。</li>
+        <li>国内法に抵触するような内容は投稿しないでください。</li>
+        <li>PSO2の画像や動画を投稿する際は、公式の<a href="http://pso2.jp/players/support/rule/copyright/" target="_blank">著作物利用ガイドライン</a>に則ってください。</li>
+        <li>危うい内容を投稿する場合はMastodonの機能を活用して、他のユーザーに配慮するよう心掛けましょう。</li>
+        <li>迷惑行為は禁止します。悪質な場合はBANする場合があります。</li>
+        <li>サーバーに過度な負荷をかける行為はご遠慮ください。</li>
+        <li>投稿の内容およびその結果について、管理者は一切の責任を負いかねます。</li>
+      </ul>
+      
+      <br>
+      <h3><i class="fa fa-plus-circle" aria-hidden="true"></i>登録について</h3>
+      <ul>
+        <li>登録には<em>メールアドレス</em>、<em>ユーザー名</em>、<em>パスワード</em>が必要です。ユーザー名は<em>@usernameのように公開されます</em>ので、<em>SEGA IDを入力しないようご注意</em>ください。</li>
+        <li>登録後に確認リンクを記載したメールをお送りします。キャリアメールを登録される場合は、あらかじめ<em>pso2.club</em>ドメインからのメールを受信できるよう設定してください。</li>
+        <li>登録から48時間以内に確認リンクへアクセスすると、アカウントをご利用いただけます。48時間を経過すると登録情報は削除されますので、再度登録してください。</li>
+        <li>登録後、確認メールが届かない場合は迷惑メールに分類されていないかご確認の上、<a href="/auth/confirmation/new">こちらから再送信をリクエスト</a>してみてください。</li>
+        <li>お預かりした情報は適切に利用します。詳しくは、右メニューのプライバシーポリシーをご覧ください。</li>
+      </ul>
+      
+      <br>
+      <h3><i class="fa fa-server" aria-hidden="true"></i>運用について</h3>
+      <ul>
+        <li>試験サービスのため、予告なくサービスが停止したり、初期化する場合があります。(何度か止まってる)</li>
+        <li>サポートが必要な場合は、<a href="https://pso2.club/@info">@info</a>宛にDMでご連絡いただくか、<em>登録済のメールアドレス</em>を添えて、メールまたはTwitter(<a href="https://twitter.com/pso2_club" target="_blank">@pso2_club</a>)でご連絡ください。なお、すべてのお問い合わせに対し、対応を保証するものではありません。</li>
+        <li>権利者からのお問い合わせに対しては迅速に対応します。</li>
+      </ul>
+      
+      <br>
+      <h3><i class="fa fa-android" aria-hidden="true"></i>botについて</h3>
+      <ul>
+        <li>プロフィールに必ずBOTバッジを表示してください</li>
+        <li>プロフィールに必ず連絡先を明記してください(補足情報でも可・他のインスタンスアカウントへのリンクでも可)</li>
+        <li>外部ユーザーへのフォローを伴う場合は事前に管理者までお問い合わせください</li>
+      </ul>
+      
+      <br>
+      <h3><i class="fa fa-product-hunt" aria-hidden="true"></i>PSO2タイムラインについて</h3>
+      <p>連合タイムラインから、PSO2関連のインスタンス上で投稿されたもののみを表示する実験中の機能です。</p>
+      <p>他のインスタンスのアカウントをお持ちの方で実験のご協力をいただける方は、<a href="/@union">こちらのアカウント</a>へフォローリクエストをお願いします。自動でフォローバックします。</p>
+      <p><small>変更後のソースコードは、AGPLv3に基づき<a href="https://github.com/pso2club/mastodon">公開しています</a>が、一部にハードコードや不要なコードがあります。</small></p>
+      
+      <br>
+      <h3><i class="fa fa-money" aria-hidden="true"></i>寄付について</h3>
+      <p>Mastodon の原作者である @Gargron(Eugen Rochko氏)はMastodonの開発やmastodon.socialの運用に対する寄付を<a href="https://www.patreon.com/user?u=619786" target="_blank">Patreon</a>(英語)で受け付けています。</p>
+      
+      <br>
+      <h3><i class="fa fa-users" aria-hidden="true"></i>このインスタンスのアカウント</h3>
+      <p>ローカルアカウントの一覧は<a href="/users/users/following">こちらから確認できます</a></p>
+      
+      <br>
+      <h3><i class="fa fa-external-link" aria-hidden="true"></i>PSO2関連の他のインスタンス(順不同・敬称略)</h3>
+      <ul>
+        <li><a href="https://eletusk.club/" target="_blank">えれたすく(eletusk.club)</a></li>
+        <!-- <li><a href="https://psodon.com/" target="_blank">ぷそどん(psodon.com)</a></li> -->
+        <!-- <li><a href="https://pso2-ship10.m.to/" target="_blank">ナウシズ民インスタンス(pso2-ship10.m.to)</a></li> -->
+        <!-- <li><a href="https://mstdn-pso2.online/" target="_blank">(mstdn-pso2.online)</a></li> -->
+      </ul>
     features:
       humane_approach_body: 他の SNS の失敗から学び、Mastodon はソーシャルメディアが誤った使い方をされることの無いように倫理的な設計を目指しています。
       humane_approach_title: より思いやりのある設計
@@ -24,7 +81,7 @@ ja:
       real_conversation_title: 本当のコミュニケーションのために
       within_reach_body: デベロッパーフレンドリーな API により実現された、iOS や Android、その他様々なプラットフォームのためのアプリでどこでも友人とやりとりできます。
       within_reach_title: いつでも身近に
-    generic_description: "%{domain} は、Mastodon インスタンスの一つです"
+    generic_description: "Mastodonの、PSO2非公式Instanceです。PSO2ユーザーだけのローカルTLがあったらいいなー、という声が聞こえた気がしたのでつくりました。※PSO2および株式会社セガゲームスとは一切関係ありません"
     hosted_on: Mastodon hosted on %{domain}
     learn_more: もっと詳しく
     other_instances: 他のインスタンス
