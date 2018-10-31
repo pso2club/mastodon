@@ -25,9 +25,9 @@ const mapStateToProps = (state, { onlyMedia, columnId }) => {
   };
 };
 
-@connect(mapStateToProps)
+export default @connect(mapStateToProps)
 @injectIntl
-export default class UnionTimeline extends React.PureComponent {
+class UnionTimeline extends React.PureComponent {
 
   static contextTypes = {
     router: PropTypes.object,
