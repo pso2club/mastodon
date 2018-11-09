@@ -2,6 +2,15 @@
 
 class StatusesIndex < Chewy::Index
   settings index: { refresh_interval: '15m' }, analysis: {
+    tokenizer: {
+      sudachi_tokenizer: {
+        type: 'sudachi_tokenizer',
+        mode: 'search',
+        discard_punctuation: true,
+        resources_path: '/etc/elasticsearch',
+        settings_path: '/etc/elasticsearch/sudachi.json',
+      },
+    },
     filter: {
       english_stop: {
         type: 'stop',
@@ -18,15 +27,15 @@ class StatusesIndex < Chewy::Index
     },
     analyzer: {
       content: {
-        tokenizer: 'uax_url_email',
+        tokenizer: 'sudachi_tokenizer',
         filter: %w(
-          english_possessive_stemmer
           lowercase
-          asciifolding
           cjk_width
-          english_stop
-          english_stemmer
+          sudachi_part_of_speech
+          sudachi_ja_stop
+          sudachi_baseform
         ),
+        type: 'custom',
       },
     },
   }
