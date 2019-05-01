@@ -2,9 +2,9 @@
 
 module Admin
   class AccountsController < BaseController
-    before_action :set_account, only: [:show, :subscribe, :unsubscribe, :redownload, :remove_avatar, :enable, :disable, :memorialize, :unionize, :undo_unionize]
+    before_action :set_account, only: [:show, :subscribe, :unsubscribe, :redownload, :remove_avatar, :remove_header, :enable, :unsilence, :unsuspend, :memorialize, :unionize, :undo_unionize]
     before_action :require_remote_account!, only: [:subscribe, :unsubscribe, :redownload]
-    before_action :require_local_account!, only: [:enable, :disable, :memorialize]
+    before_action :require_local_account!, only: [:enable, :memorialize]
 
     def index
       authorize :account, :index?
@@ -13,8 +13,10 @@ module Admin
 
     def show
       authorize @account, :show?
+
       @account_moderation_note = current_account.account_moderation_notes.new(target_account: @account)
-      @moderation_notes = @account.targeted_moderation_notes.latest
+      @moderation_notes        = @account.targeted_moderation_notes.latest
+      @warnings                = @account.targeted_account_warnings.latest.custom
       @union_domains = UnionDomain.domain
     end
 
@@ -44,19 +46,25 @@ module Admin
       redirect_to admin_account_path(@account.id)
     end
 
-    def disable
-      authorize @account.user, :disable?
-      @account.user.disable!
-      log_action :disable, @account.user
+    def unsilence
+      authorize @account, :unsilence?
+      @account.unsilence!
+      log_action :unsilence, @account
+      redirect_to admin_account_path(@account.id)
+    end
+
+    def unsuspend
+      authorize @account, :unsuspend?
+      @account.unsuspend!
+      log_action :unsuspend, @account
       redirect_to admin_account_path(@account.id)
     end
 
     def redownload
       authorize @account, :redownload?
 
-      @account.reset_avatar!
-      @account.reset_header!
-      @account.save!
+      @account.update!(last_webfingered_at: nil)
+      ResolveAccountService.new.call(@account)
 
       redirect_to admin_account_path(@account.id)
     end
@@ -75,7 +83,6 @@ module Admin
     def unionize
       authorize @account, :unionize?
       @account.unionize!
-      # @account.save!
       log_action :unionize, @account
       redirect_to admin_account_path(@account.id)
     end
@@ -83,8 +90,18 @@ module Admin
     def undo_unionize
       authorize @account, :undo_unionize?
       @account.undo_unionize!
-      # @account.save!
       log_action :undo_unionize, @account
+      redirect_to admin_account_path(@account.id)
+    end
+
+    def remove_header
+      authorize @account, :remove_header?
+
+      @account.header = nil
+      @account.save!
+
+      log_action :remove_header, @account.user
+
       redirect_to admin_account_path(@account.id)
     end
 
@@ -111,8 +128,8 @@ module Admin
         :local,
         :remote,
         :by_domain,
+        :active,
         :silenced,
-        :alphabetic,
         :suspended,
         :username,
         :display_name,
