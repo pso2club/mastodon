@@ -10,6 +10,8 @@ class InstanceFilter
   def results
     if params[:limited].present?
       DomainBlock.order(id: :desc)
+    elsif params[:union].present?
+      UnionDomain.domain
     else
       Account.remote.by_domain_accounts
     end

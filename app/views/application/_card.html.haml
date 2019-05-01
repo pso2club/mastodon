@@ -15,3 +15,5 @@
         %span
           = acct(account)
           = fa_icon('lock') if account.locked?
+          - if local_assigns[:admin]
+            = fa_icon('handshake-o') if account.union?

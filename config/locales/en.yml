@@ -322,6 +322,11 @@ en:
       total_followed_by_us: Followed by us
       total_reported: Reports about them
       total_storage: Media attachments
+      union:
+        all: All
+        members: Unionized
+        title: Union
+        union_instance: Union instance
     invites:
       deactivate_all: Deactivate all
       filter:
@@ -480,6 +485,7 @@ en:
     union_domains:
       accounts: Accounts
       add_new: Add new
+      add_new_domain: Add new union domain
       bot: Bots
       created_msg: Union instance is now created
       destroyed_msg: Union instance has been deleted

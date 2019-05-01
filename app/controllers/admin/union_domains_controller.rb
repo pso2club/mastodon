@@ -13,8 +13,10 @@ module Admin
       authorize :union_domain, :create?
       @union_domain = UnionDomain.new
       if params[:mode].present?
-        @accounts = Account.local.order(username: :asc) if params[:mode] == "following"
-        @accounts = Account.remote.where(unionmember: false).order(domain: :asc, username: :asc) if params[:mode] == "account"
+        @accounts = Account.local.order(username: :asc) if params[:mode] == 'following'
+        @accounts = Account.remote.where(unionmember: false).order(domain: :asc, username: :asc) if params[:mode] == 'account'
+        @union_domain = UnionDomain.new(domain: params[:_domain]) if params[:mode] == 'domain'
+        @union_domain = UnionDomain.new(account_id: params[:_account_id]) if params[:mode] == 'following'
       end
     end
 
@@ -26,7 +28,11 @@ module Admin
       if @union_domain.save
         UnionDomainWorker.perform_async(@union_domain.id)
         log_action :create, @union_domain
-        redirect_to admin_union_domains_path, notice: I18n.t('admin.union_domains.created_msg')
+        if @union_domain.account_id == nil
+          redirect_to admin_instances_path(union: '1'), notice: I18n.t('admin.union_domains.created_msg')
+        else
+          redirect_to admin_accounts_path(@union_domain.account_id), notice: I18n.t('admin.union_domains.created_msg')
+        end
       else
         render :new
       end

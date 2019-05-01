@@ -11,7 +11,7 @@ module Admin
     def show
       authorize :instance, :show?
 
-      @instance        = Instance.new(Account.by_domain_accounts.find_by(domain: params[:id]) || DomainBlock.find_by!(domain: params[:id]))
+      @instance        = Instance.new(Account.by_domain_accounts.find_by(domain: params[:id]) || DomainBlock.find_by!(domain: params[:id]) || UnionDomain.find_by!(domain: params[:id]))
       @following_count = Follow.where(account: Account.where(domain: params[:id])).count
       @followers_count = Follow.where(target_account: Account.where(domain: params[:id])).count
       @reports_count   = Report.where(target_account: Account.where(domain: params[:id])).count
@@ -19,6 +19,7 @@ module Admin
       @available       = DeliveryFailureTracker.available?(Account.select(:shared_inbox_url).where(domain: params[:id]).first&.shared_inbox_url)
       @media_storage   = MediaAttachment.where(account: Account.where(domain: params[:id])).sum(:file_file_size)
       @domain_block    = DomainBlock.find_by(domain: params[:id])
+      @union_domain    = UnionDomain.find_by(domain: params[:id])
     end
 
     private
@@ -38,7 +39,7 @@ module Admin
     end
 
     def filter_params
-      params.permit(:limited)
+      params.permit(:limited, :union)
     end
   end
 end

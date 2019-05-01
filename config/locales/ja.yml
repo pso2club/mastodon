@@ -322,6 +322,11 @@ ja:
       total_followed_by_us: フォロー合計
       total_reported: レポート合計
       total_storage: 添付されたメディア
+      union:
+        all: すべて
+        members: 連携のみ
+        title: 連携
+        union_instance: 連携済みのインスタンス
     invites:
       deactivate_all: すべて無効化
       filter:
@@ -480,6 +485,7 @@ ja:
     union_domains:
       accounts: アカウント
       add_new: 新規追加
+      add_new_domain: 連携インスタンスを追加
       bot: Bot
       created_msg: 連携表示設定を完了しました
       destroyed_msg: 連携表示設定を削除しました

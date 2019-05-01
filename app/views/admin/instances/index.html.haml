@@ -7,8 +7,14 @@
     %ul
       %li= filter_link_to t('admin.instances.moderation.all'), limited: nil
       %li= filter_link_to t('admin.instances.moderation.limited'), limited: '1'
+  .filter-subset
+    %strong= t('admin.instances.union.title')
+    %ul
+      %li= filter_link_to t('admin.instances.union.all'), union: nil
+      %li= filter_link_to t('admin.instances.union.members'), union: '1'
 
   %div{ style: 'flex: 1 1 auto; text-align: right' }
+    = link_to t('admin.union_domains.add_new_domain'), new_admin_union_domain_path(mode: 'domain'), class: 'button'
     = link_to t('admin.domain_blocks.add_new'), new_admin_domain_block_path, class: 'button'
 
 %hr.spacer/
@@ -31,6 +37,9 @@
             - if instance.domain_block.reject_reports?
               &bull;
               = t('admin.domain_blocks.rejecting_reports')
+          - if instance.union_domain
+            &bull;
+            = t('admin.instances.union.union_instance')
 
       .avatar-stack
         - instance.cached_sample_accounts.each do |account|
