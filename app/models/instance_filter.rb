@@ -9,11 +9,16 @@ class InstanceFilter
 
   def results
     if params[:limited].present?
-      DomainBlock.order(id: :desc)
+      scope = DomainBlock
+      scope = scope.matches_domain(params[:by_domain]) if params[:by_domain].present?
+      scope.order(id: :desc)
     elsif params[:union].present?
-      UnionDomain.domain
+      scope = UnionDomain.domain
+      scope = scope.matches_domain(params[:by_domain]) if params[:by_domain].present?
     else
-      Account.remote.by_domain_accounts
+      scope = Account.remote
+      scope = scope.matches_domain(params[:by_domain]) if params[:by_domain].present?
+      scope.by_domain_accounts
     end
   end
 end

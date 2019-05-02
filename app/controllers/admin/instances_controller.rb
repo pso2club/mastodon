@@ -39,7 +39,7 @@ module Admin
     end
 
     def filter_params
-      params.permit(:limited, :union)
+      params.permit(:limited, :by_domain, :union)
     end
   end
 end

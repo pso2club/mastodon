@@ -27,6 +27,7 @@ class UnionDomain < ApplicationRecord
   scope :all_domain, -> { select('domain').uniq.where.not(domain: nil) }
   scope :user, -> { select('account_id').where.not(account_id: nil).where(bot: false) }
   scope :bots, -> { select('account_id').where.not(account_id: nil).where(bot: true) }
+  scope :matches_domain, ->(value) { where(arel_table[:domain].matches("%#{value}%")) }
 
   def self.domain?(domain)
     UnionDomain.domain.where(domain: domain).exists?
