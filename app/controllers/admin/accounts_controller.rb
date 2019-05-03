@@ -2,9 +2,9 @@
 
 module Admin
   class AccountsController < BaseController
-    before_action :set_account, only: [:show, :subscribe, :unsubscribe, :redownload, :remove_avatar, :remove_header, :enable, :unsilence, :unsuspend, :memorialize, :unionize, :undo_unionize]
+    before_action :set_account, only: [:show, :subscribe, :unsubscribe, :redownload, :remove_avatar, :remove_header, :enable, :unsilence, :unsuspend, :memorialize, :approve, :reject, :unionize, :undo_unionize]
     before_action :require_remote_account!, only: [:subscribe, :unsubscribe, :redownload]
-    before_action :require_local_account!, only: [:enable, :memorialize]
+    before_action :require_local_account!, only: [:enable, :memorialize, :approve, :reject]
 
     def index
       authorize :account, :index?
@@ -16,8 +16,8 @@ module Admin
 
       @account_moderation_note = current_account.account_moderation_notes.new(target_account: @account)
       @moderation_notes        = @account.targeted_moderation_notes.latest
-      @union_domains = UnionDomain.domain
       @warnings                = @account.targeted_account_warnings.latest.custom
+      @union_domains = UnionDomain.domain
     end
 
     def subscribe
@@ -44,6 +44,18 @@ module Admin
       @account.user.enable!
       log_action :enable, @account.user
       redirect_to admin_account_path(@account.id)
+    end
+
+    def approve
+      authorize @account.user, :approve?
+      @account.user.approve!
+      redirect_to admin_accounts_path(pending: '1')
+    end
+
+    def reject
+      authorize @account.user, :reject?
+      SuspendAccountService.new.call(@account, including_user: true, destroy: true, skip_distribution: true)
+      redirect_to admin_accounts_path(pending: '1')
     end
 
     def unsilence
@@ -83,7 +95,6 @@ module Admin
     def unionize
       authorize @account, :unionize?
       @account.unionize!
-      # @account.save!
       log_action :unionize, @account
       redirect_to admin_account_path(@account.id)
     end
@@ -91,7 +102,6 @@ module Admin
     def undo_unionize
       authorize @account, :undo_unionize?
       @account.undo_unionize!
-      # @account.save!
       log_action :undo_unionize, @account
       redirect_to admin_account_path(@account.id)
     end
@@ -131,6 +141,7 @@ module Admin
         :remote,
         :by_domain,
         :active,
+        :pending,
         :silenced,
         :suspended,
         :username,

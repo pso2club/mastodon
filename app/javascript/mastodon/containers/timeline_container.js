@@ -7,7 +7,6 @@ import { hydrateStore } from '../actions/store';
 import { IntlProvider, addLocaleData } from 'react-intl';
 import { getLocale } from '../locales';
 import PublicTimeline from '../features/standalone/public_timeline';
-import CommunityTimeline from '../features/standalone/community_timeline';
 import UnionTimeline from '../features/standalone/union_timeline';
 import HashtagTimeline from '../features/standalone/hashtag_timeline';
 import ModalContainer from '../features/ui/containers/modal_container';
@@ -27,28 +26,26 @@ export default class TimelineContainer extends React.PureComponent {
   static propTypes = {
     locale: PropTypes.string.isRequired,
     hashtag: PropTypes.string,
-    showPublicTimeline: PropTypes.bool.isRequired,
-    showUnionTimeline: PropTypes.bool.isRequired,
+    union: PropTypes.bool,
+    local: PropTypes.bool,
   };
 
   static defaultProps = {
-    showPublicTimeline: initialState.settings.known_fediverse,
-    showUnionTimeline: initialState.settings.known_union,
+    local: !initialState.settings.known_fediverse,
+    union: !initialState.settings.known_union,
   };
 
   render () {
-    const { locale, hashtag, showPublicTimeline, showUnionTimeline } = this.props;
+    const { locale, hashtag, local, union } = this.props;
 
     let timeline;
 
     if (hashtag) {
       timeline = <HashtagTimeline hashtag={hashtag} />;
-    } else if (showPublicTimeline) {
-      timeline = <PublicTimeline />;
-    } else if (showUnionTimeline) {
+    } else if (union) {
       timeline = <UnionTimeline />;
     } else {
-      timeline = <CommunityTimeline />;
+      timeline = <PublicTimeline local={local} />;
     }
 
     return (
@@ -56,6 +53,7 @@ export default class TimelineContainer extends React.PureComponent {
         <Provider store={store}>
           <Fragment>
             {timeline}
+
             {ReactDOM.createPortal(
               <ModalContainer />,
               document.getElementById('modal-container'),
