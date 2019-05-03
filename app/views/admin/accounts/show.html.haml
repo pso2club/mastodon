@@ -172,12 +172,11 @@
 
         - unless @account.user_confirmed?
           = link_to t('admin.accounts.confirm'), admin_account_confirmation_path(@account.id), method: :post, class: 'button' if can?(:confirm, @account.user)
-       /* Stub: union bot setting
-        * - unless @account.union?
-        *   = link_to t('admin.union_domain.add_bot'), new_admin_union_domain_path(mode: 'following', _account_id: @account.id), class: 'button' if can?(:unionize, @account)
-        * - else
-        *   = link_to t('admin.union_domain.undo_bot'),
-        */
+        -# Stub: union bot setting
+        -# - unless @account.union?
+        -#   = link_to t('admin.union_domain.add_bot'), new_admin_union_domain_path(mode: 'following', _account_id: @account.id), class: 'button' if can?(:unionize, @account)
+        -# - else
+        -#   = link_to t('admin.union_domain.undo_bot'),
 
       - if @account.suspended?
         = link_to t('admin.accounts.undo_suspension'), unsuspend_admin_account_path(@account.id), method: :post, class: 'button' if can?(:unsuspend, @account)

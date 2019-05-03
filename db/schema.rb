@@ -671,15 +671,6 @@ ActiveRecord::Schema.define(version: 2019_04_09_054914) do
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
-  create_table "union_domains", force: :cascade do |t|
-    t.string   "domain"
-    t.bigint  "account_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "bot", default: false
-    t.index ["domain", "account_id"], name: "index_union_domains_on_domain_and_account_id", unique: true
-  end
-
   create_table "tombstones", force: :cascade do |t|
     t.bigint "account_id"
     t.string "uri", null: false
@@ -687,6 +678,15 @@ ActiveRecord::Schema.define(version: 2019_04_09_054914) do
     t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_tombstones_on_account_id"
     t.index ["uri"], name: "index_tombstones_on_uri"
+  end
+
+  create_table "union_domains", force: :cascade do |t|
+    t.string   "domain"
+    t.bigint  "account_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "bot", default: false
+    t.index ["domain", "account_id"], name: "index_union_domains_on_domain_and_account_id", unique: true
   end
 
   create_table "user_invite_requests", force: :cascade do |t|

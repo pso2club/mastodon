@@ -11,7 +11,7 @@ class PublicTimelinesController < ApplicationController
     respond_to do |format|
       format.html do
         @initial_state_json = ActiveModelSerializers::SerializableResource.new(
-          InitialStatePresenter.new(settings: { known_fediverse: Setting.show_known_fediverse_at_about_page }, token: current_session&.token),
+          InitialStatePresenter.new(settings: { known_fediverse: Setting.show_known_fediverse_at_about_page, known_union: Setting.show_known_union_at_about_page }, token: current_session&.token),
           serializer: InitialStateSerializer
         ).to_json
       end
