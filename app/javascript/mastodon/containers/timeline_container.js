@@ -26,13 +26,13 @@ export default class TimelineContainer extends React.PureComponent {
   static propTypes = {
     locale: PropTypes.string.isRequired,
     hashtag: PropTypes.string,
-    union: PropTypes.bool,
     local: PropTypes.bool,
+    union: PropTypes.bool,
   };
 
   static defaultProps = {
     local: !initialState.settings.known_fediverse,
-    union: !initialState.settings.known_union,
+    union: initialState.settings.known_union,
   };
 
   render () {
