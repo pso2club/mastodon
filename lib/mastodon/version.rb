@@ -13,7 +13,7 @@ module Mastodon
     end
 
     def patch
-      1
+      2
     end
 
     def pre
@@ -21,7 +21,7 @@ module Mastodon
     end
 
     def flags
-      '-pso2'
+      ''
     end
 
     def to_a
@@ -42,7 +42,7 @@ module Mastodon
 
     # specify git tag or commit hash here
     def source_tag
-      ['v', to_a.join('.'), flags].join
+      ENV.fetch('SOURCE_TAG') { nil }
     end
 
     def source_url
