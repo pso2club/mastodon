@@ -41,7 +41,7 @@
     - if @union_domain
       = link_to t('admin.union_domains.undo'), admin_union_domain_path(@union_domain), class: 'button'
     - else
-      = link_to t('admin.union_domains.add_new'), admin_union_domain_path(mode: 'domain', _domain: @instance.domain), class: 'button'
+      = link_to t('admin.union_domains.add_new'), new_admin_union_domain_path(mode: 'domain', _domain: @instance.domain), class: 'button'
     - if @domain_block
       = link_to t('admin.domain_blocks.undo'), admin_domain_block_path(@domain_block), class: 'button'
     - else
