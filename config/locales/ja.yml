@@ -385,11 +385,11 @@ ja:
       total_followed_by_us: フォロー合計
       total_reported: 通報合計
       total_storage: 添付されたメディア
-    union:
-      all: すべて
-      members: 連携のみ
-      title: 連携
-      union_instance: 連携済みのインスタンス
+      union:
+        all: すべて
+        members: 連携のみ
+        title: 連携
+        union_instance: 連携済みのインスタンス
     invites:
       deactivate_all: すべて無効化
       filter:
