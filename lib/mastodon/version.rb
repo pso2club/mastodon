@@ -21,7 +21,7 @@ module Mastodon
     end
 
     def flags
-      'rc2-pso2'
+      '-pso2'
     end
 
     def to_a
