@@ -21,7 +21,7 @@ module Mastodon
     end
 
     def flags
-      'rc2-union'
+      '-union'
     end
 
     def to_a
