@@ -234,7 +234,7 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
     @account.polls.new(
       multiple: multiple,
       expires_at: expires_at,
-      options: items.map { |item| item['name'].presence || item['content'] },
+      options: items.map { |item| item['name'].presence || item['content'] }.compact,
       cached_tallies: items.map { |item| item.dig('replies', 'totalItems') || 0 }
     )
   end
@@ -380,7 +380,7 @@ class ActivityPub::Activity::Create < ActivityPub::Activity
 
   def skip_download?
     return @skip_download if defined?(@skip_download)
-    @skip_download ||= DomainBlock.find_by(domain: @account.domain)&.reject_media?
+    @skip_download ||= DomainBlock.reject_media?(@account.domain)
   end
 
   def reply_to_local?
